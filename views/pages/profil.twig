@@ -1,0 +1,16 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+	<p>Nom :
+		{{ utilisateur.nom }}</p>
+	<p>Prénom :
+		{{ utilisateur.prenom }}</p>
+	<p>Email :
+		{{ utilisateur.email }}</p>
+	<p>Date de naissance :
+		{{ utilisateur.date_naissance }}</p>
+	<p>Mes points :
+		{{ utilisateur.points }}</p>
+
+	<a href="/modifierProfil" class="btn btn-primary">Modifier profil</a>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+<div>
+    <h1>Bienvenue, {{ utilisateur.prenom }} {{ utilisateur.nom }}</h1>
+    <p>Vos points actuels : {{ utilisateur.points }}</p>
+<a href="/profil" class="btn btn-primary">Mon profil</a>
+    {# Afficher le bouton d'administration si le rôle est ADMIN #}
+    
+    {% if utilisateur.role == 'ADMIN' %}
+        <a href="/admin" class="btn btn-primary">Accéder à l'administration</a>
+    {% endif %}
+        <form action="/home/deconnexion" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Déconnexion</button>
+    </form>
+</div>
+{% endblock %}

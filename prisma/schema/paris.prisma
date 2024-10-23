@@ -1,0 +1,13 @@
+model Paris {
+  id             Int                @id @default(autoincrement())
+  utilisateur_id Int
+  paris_id       Int?
+  equipe_choisie String
+  points_mises   Int
+  date_pari      DateTime
+  perte_id       Int?
+  status         String
+
+  utilisateur    Utilisateur        @relation("UtilisateurParis", fields: [utilisateur_id], references: [id])
+  pertesUtilisateurs PertesUtilisateurs[] @relation("ParisPertes")
+}

@@ -1,0 +1,26 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+<div>
+		<body>
+
+			<div>
+				<h1>Se connecter</h1>
+				<form action="/login" method="POST">
+
+					<div>
+						<input autocomplete="mail" id="mail" type="text" name="mail" placeholder="Mail" required>
+					</div>
+
+					<div>
+						<input id="password" type="password" name="password" placeholder="Password" required>
+					</div>
+
+					<div>
+						<input type="submit" value="Sign In">
+					</div>
+
+				</form>
+
+</body>
+{% endblock %}

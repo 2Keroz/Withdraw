@@ -1,0 +1,7 @@
+model Pertes {
+  id             Int                @id @default(autoincrement())
+  nom            String
+  valeur         Int
+
+  pertesUtilisateurs PertesUtilisateurs[] @relation("PertesPertesUtilisateurs")
+}

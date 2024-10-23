@@ -1,0 +1,47 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+<div>
+    <h1>Gestion des utilisateurs</h1>
+
+    <form action="/admin/deconnexion" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Déconnexion</button>
+    </form>
+
+    <form action="/admin/home" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-danger">HOME</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Points</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs %}
+            <tr>
+                <td>{{ utilisateur.id }}</td>
+                <td>{{ utilisateur.nom }}</td>
+                <td>{{ utilisateur.prenom }}</td>
+                <td>{{ utilisateur.email }}</td>
+                <td>{{ utilisateur.points }}</td>
+                <td>{{ utilisateur.role }}</td>
+                <td>
+                    <a href="/admin/utilisateur/{{ utilisateur.id }}/modifier" class="btn btn-warning">Modifier</a>
+                    <form action="/admin/utilisateur/{{ utilisateur.id }}/supprimer" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

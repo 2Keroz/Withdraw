@@ -1,0 +1,11 @@
+model PertesUtilisateurs {
+  id             Int                @id @default(autoincrement())
+  utilisateur_id Int
+  pertes_id      Int
+  paris_id       Int
+  quantite       Int
+
+  utilisateur    Utilisateur        @relation("UtilisateurPertes", fields: [utilisateur_id], references: [id])
+  perte          Pertes             @relation("PertesPertesUtilisateurs", fields: [pertes_id], references: [id])
+  paris          Paris              @relation("ParisPertes", fields: [paris_id], references: [id])
+}
