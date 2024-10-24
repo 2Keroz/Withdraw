@@ -8,6 +8,7 @@ const loginRouter = require("./router/users/loginRouter");
 const homeRouter = require("./router/users/homeRouter");
 const adminRouter = require("./router/admin/adminRouter");
 const userRouter = require("./router/users/userRouter");
+const resetPasswordRouter = require("./router/users/resetPasswordRouter");
 
 const app = express(); // on lance le server
 app.use(express.static("./public"))
@@ -23,6 +24,7 @@ app.use(loginRouter)
 app.use(homeRouter)
 app.use(adminRouter)
 app.use(userRouter)
+app.use(resetPasswordRouter)
 
 app.listen(3000, ()=>{
     console.log("Connecté sur le port 3000");  

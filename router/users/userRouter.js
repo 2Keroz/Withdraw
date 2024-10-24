@@ -4,6 +4,7 @@ const authguard = require('../../services/authguard');
 
 const prisma = new PrismaClient();
 
+// Route pour afficher le profil
 userRouter.get('/profil', authguard, async (req, res) => {
     try {
         const utilisateur = await prisma.utilisateur.findUnique({
@@ -13,7 +14,12 @@ userRouter.get('/profil', authguard, async (req, res) => {
         });
 
         if (utilisateur) {
-            res.render("pages/profil.twig", { utilisateur });
+            // Formatage de la date de naissance pour affichage
+            const formattedDateNaissance = utilisateur.date_naissance
+                ? utilisateur.date_naissance.toISOString().split('T')[0]
+                : '';
+
+            res.render("pages/profil.twig", { utilisateur: { ...utilisateur, date_naissance: formattedDateNaissance } });
         } else {
             res.redirect('/login');
         }
@@ -23,6 +29,7 @@ userRouter.get('/profil', authguard, async (req, res) => {
     }
 });
 
+// Route pour modifier le profil
 userRouter.get('/modifierProfil', authguard, async (req, res) => {
     try {
         const utilisateur = await prisma.utilisateur.findUnique({
@@ -32,7 +39,12 @@ userRouter.get('/modifierProfil', authguard, async (req, res) => {
         });
 
         if (utilisateur) {
-            res.render("pages/modifierProfil.twig", { utilisateur });
+            // Formatage de la date de naissance pour affichage
+            const formattedDateNaissance = utilisateur.date_naissance
+                ? utilisateur.date_naissance.toISOString().split('T')[0]
+                : '';
+
+            res.render("pages/modifierProfil.twig", { utilisateur: { ...utilisateur, date_naissance: formattedDateNaissance } });
         } else {
             res.redirect('/login');
         }
@@ -42,7 +54,7 @@ userRouter.get('/modifierProfil', authguard, async (req, res) => {
     }
 });
 
-
+// Route pour mettre à jour le profil
 userRouter.post('/profil/modifier', authguard, async (req, res) => {
     try {
         const { nom, prenom, email, date_naissance } = req.body;
@@ -59,6 +71,8 @@ userRouter.post('/profil/modifier', authguard, async (req, res) => {
                 date_naissance: dateNaissance
             }
         });
+
+        // Mettre à jour la session utilisateur
         req.session.utilisateur = updatedUser;
 
         res.redirect('/home');
@@ -68,6 +82,7 @@ userRouter.post('/profil/modifier', authguard, async (req, res) => {
     }
 });
 
+// Route pour déconnexion
 userRouter.post('/home/deconnexion', (req, res) => {
     req.session.destroy(err => {
         if (err) {

@@ -4,6 +4,7 @@ model Utilisateur {
   prenom             String
   email              String               @unique
   password           String
+  resetToken         ResetToken?
   date_naissance     DateTime
   image_profil       String?
   date_inscription   DateTime             @default(now())
@@ -12,4 +13,13 @@ model Utilisateur {
   role               String               @default("USER")
   paris              Paris[]              @relation("UtilisateurParis")
   pertesUtilisateurs PertesUtilisateurs[] @relation("UtilisateurPertes")
+}
+
+model ResetToken {
+  id            Int         @id @default(autoincrement())
+  token         String
+  utilisateurId Int         @unique
+  utilisateur   Utilisateur @relation(fields: [utilisateurId], references: [id])
+  expiresAt     DateTime
+  createdAt     DateTime    @default(now())
 }
