@@ -24,7 +24,15 @@ registerRouter.post("/register", async (req, res) => {
             }
         });
         console.log("Utilisateur créée avec succès :", utilisateur);
-        res.redirect("/login");
+
+        req.session.utilisateur = {
+            email: utilisateur.email,
+            nom: utilisateur.nom,
+            prenom: utilisateur.prenom,
+            date_naissance: utilisateur.date_naissance
+        };
+
+        res.redirect("/home");
     } catch (error) {
         console.log(error);
         res.render("pages/register.twig", { errors: { server: "Une erreur est survenue lors de l'inscription." } });

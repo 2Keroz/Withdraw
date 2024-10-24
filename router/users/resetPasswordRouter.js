@@ -23,11 +23,11 @@ resetPasswordRouter.post('/mot-de-passe-oublie', async (req, res) => {
       });
   
       if (!utilisateur) {
-        return res.status(404).send('Utilisateur introuvable');
+        return res.status(404).send('Le compte est introuvable');
       }
   
       const token = crypto.randomBytes(32).toString('hex');
-      const expiresAt = new Date(Date.now() + 3600000);
+      const expiresAt = new Date(Date.now() + 600000);
   
       await prisma.resetToken.deleteMany({
         where: { utilisateurId: utilisateur.id },
