@@ -1,0 +1,11 @@
+model Equipe {
+    id            Int         @id @default(autoincrement())
+    nom           String
+    acronyme      String?
+    jeu           Jeu         @relation(fields: [jeuId], references: [id])
+    jeuId         Int
+    competition   Competition @relation(fields: [competitionId], references: [id])
+    competitionId Int
+    matchsAsEquipe1 Match[]   @relation("Equipe1")  // Relation avec les matchs en tant qu'équipe 1
+    matchsAsEquipe2 Match[]   @relation("Equipe2")  // Relation avec les matchs en tant qu'équipe 2
+}

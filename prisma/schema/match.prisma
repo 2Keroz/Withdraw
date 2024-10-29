@@ -1,0 +1,14 @@
+
+model Match {
+    id            Int      @id @default(autoincrement())
+    equipe1Id     Int      // Clé étrangère pour l'équipe 1
+    equipe2Id     Int      // Clé étrangère pour l'équipe 2
+    date          DateTime
+    jeuId         Int
+    competitionId Int
+
+    equipe1       Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id])
+    equipe2       Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id])
+    jeu           Jeu       @relation(fields: [jeuId], references: [id])
+    competition   Competition @relation(fields: [competitionId], references: [id])
+}

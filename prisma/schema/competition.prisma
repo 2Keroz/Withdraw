@@ -1,0 +1,9 @@
+model Competition {
+    id          Int      @id @default(autoincrement())
+    nom         String
+    description String
+    jeuId       Int      // Clé étrangère pour le jeu
+    jeu         Jeu      @relation(fields: [jeuId], references: [id])
+    equipes     Equipe[] // Relation avec les équipes
+    matchs      Match[]  // Relation avec les matchs
+}

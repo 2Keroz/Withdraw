@@ -64,7 +64,8 @@ resetPasswordRouter.post('/mot-de-passe-oublie', async (req, res) => {
         return res.status(500).send('Erreur lors de l\'envoi de l\'email de réinitialisation.');
       }
   
-      res.send('Un email de réinitialisation a été envoyé.');
+      // res.send('Un email de réinitialisation a été envoyé.');
+      res.render('pages/email-send.twig')
     } catch (error) {
       console.error(error);
       res.status(500).send('Erreur lors de la demande de réinitialisation.');
@@ -107,7 +108,8 @@ resetPasswordRouter.post('/mot-de-passe-reinitialisation', async (req, res) => {
       where: { id: resetToken.id },
     });
   
-    res.send('Votre mot de passe a été mis à jour avec succès.');
+    // res.send('Votre mot de passe a été mis à jour avec succès.');
+    res.render('pages/mot-de-passe-reinitilisation-success.twig')
   });
 
 module.exports = resetPasswordRouter;

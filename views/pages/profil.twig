@@ -1,16 +1,26 @@
 {% extends "../layouts/base.twig" %}
 
 {% block main %}
-	<p>Nom :
-		{{ utilisateur.nom }}</p>
-	<p>Prénom :
-		{{ utilisateur.prenom }}</p>
-	<p>Email :
-		{{ utilisateur.email }}</p>
-	<p>Date de naissance :
-		{{ utilisateur.date_naissance }}</p>
-	<p>Mes points :
-		{{ utilisateur.points }}</p>
-
-	<a href="/modifierProfil" class="btn btn-primary">Modifier profil</a>
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="px-6 py-8">
+            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Mon Profil</h1>
+            <div class="space-y-4 mb-6">
+                <p class="text-gray-700"><span class="font-semibold">Nom :</span> {{ utilisateur.nom }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Prénom :</span> {{ utilisateur.prenom }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Email :</span> {{ utilisateur.email }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Mes points :</span> <span class="text-red-600 font-bold">{{ utilisateur.points }}</span></p>
+            </div>
+            <div class="space-y-4">
+                <a href="/modifierProfil" class="block w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 text-center transition duration-300">Modifier profil</a>
+                <form action="/profil/supprimer" method="POST">
+                    <button type="submit" class="w-full bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 text-center transition duration-300">
+                        Supprimer mon compte
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

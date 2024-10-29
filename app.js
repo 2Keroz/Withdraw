@@ -10,6 +10,7 @@ const adminRouter = require("./router/admin/adminRouter");
 const userRouter = require("./router/users/userRouter");
 const resetPasswordRouter = require("./router/users/resetPasswordRouter");
 
+
 const app = express(); // on lance le server
 app.use(express.static("./public"))
 app.use(express.urlencoded({ extended: true }));

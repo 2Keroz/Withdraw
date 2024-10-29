@@ -10,6 +10,7 @@ registerRouter.get('/register', (req,res) =>{
     res.render('pages/register.twig')
 })
 
+// Router de création de compte
 registerRouter.post("/register", async (req, res) => {
     try {
         const formattedDate = new Date(req.body.date).toISOString();

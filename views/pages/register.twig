@@ -1,45 +1,48 @@
 {% extends "../layouts/base.twig" %}
 
 {% block main %}
-<title>S'inscrire</title>
-{% endblock %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-10 rounded-lg shadow-lg w-full max-w-sm">
+        <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">S'inscrire</h1>
+        <form action="/register" method="POST">
+            
+            <div class="mb-4">
+                <input autocomplete="nom" id="nom" type="text" name="nom" placeholder="Nom" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-{% block main %}
+            <div class="mb-4">
+                <input autocomplete="prenom" id="prenom" type="text" name="prenom" placeholder="Prénom" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-<body>
+            <div class="mb-4">
+                <input autocomplete="date" id="birth" type="date" name="date" placeholder="Date de naissance"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-  <div>
-	<h1>S'inscrire</h1>
-    <form action="/register" method="POST">
+            <div class="mb-4">
+                <input autocomplete="mail" id="mail" type="email" name="mail" placeholder="Email"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-      <div> 
-        <input autocomplete="nom" id="nom" type="text" name="nom" placeholder="Nom" required>
-      </div>
-      <div> 
-        <input autocomplete="prenom" id="prenom" type="text" name="prenom"  placeholder="Prénom" required>
-      </div>
-      <div>
-        <input autocomplete="date" id="birth" type="date" name="date" placeholder="Date de naissance" required>
-      </div>
-      <div>
-        <input autocomplete="mail" id="mail" type="text" name="mail" placeholder="Email" required>
-      </div>
+            <div class="mb-4">
+                <input id="password" type="password" name="password" placeholder="Mot de passe"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-      <div>
-        <input id="password" type="password" name="password" placeholder="Password" required>
-      </div>
+            <div class="mb-6">
+                <input id="confirm_password" type="password" name="confirm_password" placeholder="Confirmer le mot de passe"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" required>
+            </div>
 
-      <div>
-        <input id="password" type="password" name="confirm_password" placeholder="Password" required>
-      </div>
+            <div>
+                <input type="submit" value="S'inscrire" 
+                    class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 cursor-pointer">
+            </div>
+        </form>
 
-      <div>
-        <input type="submit" value="Sign Up">
-      </div>
-
-    </form>
-  </div>
-</body>
-
-
+        <p class="text-center mt-4">Déjà inscrit ? <a href="/login" class="text-red-600 hover:underline">Connectez-vous ici</a></p>
+    </div>
+</div>
 {% endblock %}

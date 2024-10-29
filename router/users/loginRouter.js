@@ -11,7 +11,7 @@ loginRouter.get('/', (req,res) =>{
 loginRouter.get('/login', (req,res) =>{
     res.render('pages/login.twig')
 })
-
+// Route de connexion
 loginRouter.post("/login", async (req, res) => {
     try {
         const mail = req.body.mail;
