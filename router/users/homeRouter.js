@@ -10,44 +10,115 @@ homeRouter.get('/home', authguard, async (req, res) => {
         // Vérifie si l'utilisateur est connecté
         if (req.session.utilisateur) {
             // Récupère les informations de l'utilisateur
-            let utilisateur = await prisma.utilisateur.findUnique({
-                where: {
-                    email: req.session.utilisateur.email
-                }
+            const utilisateur = await prisma.utilisateur.findUnique({
+                where: { email: req.session.utilisateur.email }
             });
             
             if (utilisateur) {
                 const { nom, prenom, points, role } = utilisateur;
 
+                // Récupère les jeux pour le menu
+                const jeux = await prisma.jeu.findMany();
+
                 // Récupère les matchs à venir
                 const matchsAvenir = await prisma.match.findMany({
-                    where: {
-                        date: {
-                            gte: new Date(), // Matchs à venir (date >= maintenant)
-                        },
-                    
-                    },
-                    orderBy: {
-                        date: 'asc', // Trier par date croissante
-                    },
+                    where: { date: { gte: new Date() } },
+                    orderBy: { date: 'asc' },
                     include: {
-                        equipe1: { select: { nom: true } }, // Inclure le nom de l'équipe 1
-                        equipe2: { select: { nom: true } }, // Inclure le nom de l'équipe 2
-                    },
+                        equipe1: { select: { nom: true } },
+                        equipe2: { select: { nom: true } }
+                    }
                 });
 
-                // Rendu de la vue avec les données utilisateur et les matchs à venir
+                // Rendu de la vue avec les données utilisateur, les jeux, et les matchs à venir
                 return res.render("pages/home.twig", {
                     utilisateur: { nom, prenom, points, role },
+                    jeux,
                     matchsAvenir
                 });
             }
         }
-        // Redirige vers la page de connexion si l'utilisateur n'est pas trouvé
         res.redirect("/login");
     } catch (error) {
         console.error("Erreur lors de la récupération des données de l'utilisateur:", error);
         res.redirect("/login");
     }
 });
+
+// Route pour récupérer les compétitions d'un jeu spécifique
+homeRouter.get('/home/jeux/:jeuId/competitions', authguard, async (req, res) => {
+    const { jeuId } = req.params;
+
+    try {
+        const competitions = await prisma.competition.findMany({
+            where: { jeuId: parseInt(jeuId) }
+        });
+        res.json(competitions); // Retourne les compétitions en JSON
+    } catch (error) {
+        console.error("Erreur lors de la récupération des compétitions:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+// Route pour récupérer les matchs à venir d'une compétition spécifique
+homeRouter.get('/home/competitions/:competitionId/matchs', authguard, async (req, res) => {
+    const { competitionId } = req.params;
+
+    try {
+        const matchs = await prisma.match.findMany({
+            where: {
+                competitionId: parseInt(competitionId),
+                date: { gte: new Date() } // Matchs à venir
+            },
+            include: {
+                equipe1: { select: { nom: true } },
+                equipe2: { select: { nom: true } }
+            },
+            orderBy: { date: 'asc' }
+        });
+        res.json(matchs); // Retourne les matchs en JSON
+    } catch (error) {
+        console.error("Erreur lors de la récupération des matchs:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+// Route pour récupérer les compétitions d'un jeu spécifique
+homeRouter.get('/home/jeux/:jeuId/competitions', authguard, async (req, res) => {
+    const { jeuId } = req.params;
+
+    try {
+        const competitions = await prisma.competition.findMany({
+            where: { jeuId: parseInt(jeuId) }
+        });
+        res.json(competitions); // Retourne les compétitions en JSON
+    } catch (error) {
+        console.error("Erreur lors de la récupération des compétitions:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+// Route pour récupérer les matchs à venir d'une compétition spécifique
+homeRouter.get('/home/competitions/:competitionId/matchs', authguard, async (req, res) => {
+    const { competitionId } = req.params;
+
+    try {
+        const matchs = await prisma.match.findMany({
+            where: {
+                competitionId: parseInt(competitionId),
+                date: { gte: new Date() } // Matchs à venir
+            },
+            include: {
+                equipe1: { select: { nom: true } },
+                equipe2: { select: { nom: true } }
+            },
+            orderBy: { date: 'asc' }
+        });
+        res.json(matchs); // Retourne les matchs en JSON
+    } catch (error) {
+        console.error("Erreur lors de la récupération des matchs:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+
 module.exports = homeRouter;

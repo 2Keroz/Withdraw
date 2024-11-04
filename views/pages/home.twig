@@ -5,14 +5,13 @@
 		<div
 			class="w-full mx-auto flex flex-col md:flex-row gap-8">
 			<!-- Boîte de bienvenue -->
-			<div
-				class="w-full md:w-1/2">
-				<!-- Modifié ici pour prendre 50% de la largeur -->
+			<div class="w-full md:w-1/2">
 				<div class="max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
 					<div class="px-6 py-8">
 						<h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Bienvenue,
 							{{ utilisateur.prenom }}
-							{{ utilisateur.nom }}</h1>
+							{{ utilisateur.nom }}
+						</h1>
 						<div class="mb-6 text-center">
 							<p class="text-lg text-gray-600">Vos points actuels :
 								<span class="font-bold text-red-600">{{ utilisateur.points }}</span>
@@ -33,29 +32,228 @@
 				</div>
 			</div>
 
+			<!-- Menu des jeux et compétitions -->
+			<div class="w-full md:w-1/3">
+				<div class="h-full bg-white rounded-lg shadow-lg overflow-hidden">
+					<div class="px-6 py-8">
+						<h2 class="text-xl font-semibold text-gray-800 mb-4">Jeux et Compétitions</h2>
+						<ul id="jeux-list" class="space-y-4">
+							{% for jeu in jeux %}
+								<li>
+									<a href="#" onclick="loadCompetitions({{ jeu.id }})" class="text-blue-600 hover:underline">{{ jeu.nom }}</a>
+									<ul id="competitions-{{ jeu.id }}" class="competitions-list ml-4 mt-2 space-y-2" style="display: none;"></ul>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
 			<!-- Section des matchs à venir -->
-			<div
-				class="w-full md:w-2/3">
+			<div class="w-full md:w-2/3">
 				<div class="h-full bg-white rounded-lg shadow-lg overflow-hidden">
 					<div class="px-6 py-8">
 						<h2 class="text-xl font-semibold text-gray-800 mb-4">Matchs à venir</h2>
-						{% if matchsAvenir is not empty %}
-							<ul class="space-y-4">
-								{% for match in matchsAvenir %}
-									<li class="p-4 border border-gray-300 rounded-md">
-										<h3 class="text-lg font-bold">{{ match.equipe1.nom }}
-											vs
-											{{ match.equipe2.nom }}</h3>
-										<p class="text-gray-600">Date :
-											{{ match.date | date("d/m/Y") }}
-											à
-											{{ match.date | date("H:i") }}</p>
-									</li>
-								{% endfor %}
-							</ul>
-						{% else %}
-							<p class="text-gray-600">Aucun match à venir pour le moment.</p>
-						{% endif %}
+						<div id="matchs-container">
+							{% if matchsAvenir is not empty %}
+								<ul class="space-y-4">
+									{% for match in matchsAvenir %}
+										<li class="p-4 border border-gray-300 rounded-md">
+											<h3 class="text-lg font-bold">{{ match.equipe1.nom }}
+												vs
+												{{ match.equipe2.nom }}</h3>
+											<p class="text-gray-600">Date :
+												{{ match.date | date("d/m/Y") }}
+												à
+												{{ match.date | date("H:i") }}</p>
+										</li>
+									{% endfor %}
+								</ul>
+							{% else %}
+								<p class="text-gray-600">Aucun match à venir pour le moment.</p>
+							{% endif %}
+						</div>
 					</div>
 				</div>
-			{% endblock %}
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Fonction pour charger les compétitions d'un jeu spécifique
+function loadCompetitions(jeuId) {
+const competitionList = document.getElementById (`competitions-${jeuId}`);
+
+// Vérifie si les compétitions sont déjà chargées
+if (competitionList.childElementCount === 0) {
+fetch (`/home/jeux/${jeuId}/competitions`).then(response => response.json()).then(competitions => {
+competitionList.style.display = 'block'; // Affiche la liste des compétitions
+competitions.forEach(competition => {
+const li = document.createElement('li');
+li.innerHTML = `<a href="#" onclick="loadMatchs(${
+competition.id
+})" class="text-blue-600 hover:underline">${
+competition.nom
+}</a>`;
+competitionList.appendChild(li);
+});
+}).catch(error => console.error("Erreur lors du chargement des compétitions:", error));
+} else { // Toggle affichage
+competitionList.style.display = (competitionList.style.display === 'none') ? 'block' : 'none';
+}
+}
+
+// Fonction pour charger les matchs d'une compétition spécifique
+function loadMatchs(competitionId) {
+fetch (`/home/competitions/${competitionId}/matchs`).then(response => response.json()).then(matchs => {
+const matchsContainer = document.getElementById('matchs-container');
+matchsContainer.innerHTML = '<ul class="space-y-4">' + matchs.map(match => `
+							<li class="p-4 border border-gray-300 rounded-md">
+								<h3 class="text-lg font-bold">${
+match.equipe1.nom
+} vs ${
+match.equipe2.nom
+}</h3>
+								<p class="text-gray-600">Date : ${
+new Date(match.date).toLocaleDateString()
+} à ${
+new Date(match.date).toLocaleTimeString()
+}</p>
+							</li>
+						`).join('') + '</ul>';
+}).catch(error => console.error("Erreur lors du chargement des matchs:", error));
+}
+	</script>
+{% endblock %}
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+	<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+		<div
+			class="w-full mx-auto flex flex-col md:flex-row gap-8">
+			<!-- Boîte de bienvenue -->
+			<div class="w-full md:w-1/2">
+				<div class="max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+					<div class="px-6 py-8">
+						<h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Bienvenue,
+							{{ utilisateur.prenom }}
+							{{ utilisateur.nom }}
+						</h1>
+						<div class="mb-6 text-center">
+							<p class="text-lg text-gray-600">Vos points actuels :
+								<span class="font-bold text-red-600">{{ utilisateur.points }}</span>
+							</p>
+						</div>
+						<div class="space-y-4 mt-8">
+							<a href="/profil" class="block w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 text-center transition duration-300">Mon profil</a>
+
+							{% if utilisateur.role == 'ADMIN' %}
+								<a href="/admin" class="block w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 text-center transition duration-300">Accéder à l'administration</a>
+							{% endif %}
+
+							<form action="/home/deconnexion" method="POST">
+								<button type="submit" class="w-full bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 text-center transition duration-300">Déconnexion</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Menu des jeux et compétitions -->
+			<div class="w-full md:w-1/3">
+				<div class="h-full bg-white rounded-lg shadow-lg overflow-hidden">
+					<div class="px-6 py-8">
+						<h2 class="text-xl font-semibold text-gray-800 mb-4">Jeux et Compétitions</h2>
+						<ul id="jeux-list" class="space-y-4">
+							{% for jeu in jeux %}
+								<li>
+									<a href="#" onclick="loadCompetitions({{ jeu.id }})" class="text-blue-600 hover:underline">{{ jeu.nom }}</a>
+									<ul id="competitions-{{ jeu.id }}" class="competitions-list ml-4 mt-2 space-y-2" style="display: none;"></ul>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Section des matchs à venir -->
+			<div class="w-full md:w-2/3">
+				<div class="h-full bg-white rounded-lg shadow-lg overflow-hidden">
+					<div class="px-6 py-8">
+						<h2 class="text-xl font-semibold text-gray-800 mb-4">Matchs à venir</h2>
+						<div id="matchs-container">
+							{% if matchsAvenir is not empty %}
+								<ul class="space-y-4">
+									{% for match in matchsAvenir %}
+										<li class="p-4 border border-gray-300 rounded-md">
+											<h3 class="text-lg font-bold">{{ match.equipe1.nom }}
+												vs
+												{{ match.equipe2.nom }}</h3>
+											<p class="text-gray-600">Date :
+												{{ match.date | date("d/m/Y") }}
+												à
+												{{ match.date | date("H:i") }}</p>
+										</li>
+									{% endfor %}
+								</ul>
+							{% else %}
+								<p class="text-gray-600">Aucun match à venir pour le moment.</p>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Fonction pour charger les compétitions d'un jeu spécifique
+function loadCompetitions(jeuId) {
+const competitionList = document.getElementById (`competitions-${jeuId}`);
+
+// Vérifie si les compétitions sont déjà chargées
+if (competitionList.childElementCount === 0) {
+fetch (`/home/jeux/${jeuId}/competitions`).then(response => response.json()).then(competitions => {
+competitionList.style.display = 'block'; // Affiche la liste des compétitions
+competitions.forEach(competition => {
+const li = document.createElement('li');
+li.innerHTML = `<a href="#" onclick="loadMatchs(${
+competition.id
+})" class="text-blue-600 hover:underline">${
+competition.nom
+}</a>`;
+competitionList.appendChild(li);
+});
+}).catch(error => console.error("Erreur lors du chargement des compétitions:", error));
+} else { // Toggle affichage
+competitionList.style.display = (competitionList.style.display === 'none') ? 'block' : 'none';
+}
+}
+
+// Fonction pour charger les matchs d'une compétition spécifique
+function loadMatchs(competitionId) {
+fetch (`/home/competitions/${competitionId}/matchs`).then(response => response.json()).then(matchs => {
+const matchsContainer = document.getElementById('matchs-container');
+matchsContainer.innerHTML = '<ul class="space-y-4">' + matchs.map(match => {
+const date = new Date(match.date);
+const formattedDate = date.toLocaleDateString();
+const formattedTime = date.toLocaleTimeString([], {
+hour: '2-digit',
+minute: '2-digit'
+});
+
+return `
+                        <li class="p-4 border border-gray-300 rounded-md">
+                            <h3 class="text-lg font-bold">${
+match.equipe1.nom
+} vs ${
+match.equipe2.nom
+}</h3>
+                            <p class="text-gray-600">Date : ${formattedDate} à ${formattedTime}</p>
+                        </li>
+                    `;
+}).join('') + '</ul>';
+}).catch(error => console.error("Erreur lors du chargement des matchs:", error));
+}
+	</script>
+{% endblock %}
