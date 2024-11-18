@@ -12,8 +12,14 @@ adminRouter.get('/admin', authguard, async (req, res) => {
                 include: {
                     equipe1: { select: { nom: true } },
                     equipe2: { select: { nom: true } },
-                }});
-            return res.render("pages/admin.twig", { utilisateurs, matchs });
+                    // equipeGagnante: { select: { nom: true } } // Inclure l'équipe gagnante
+                }
+            });
+
+            const matchsClotures = matchs.filter(match => match.cloture);
+            const matchsNonClotures = matchs.filter(match => !match.cloture);
+
+            return res.render("pages/admin.twig", { utilisateurs, matchsNonClotures, matchsClotures });
         }
         res.redirect("/home");
     } catch (error) {
@@ -542,5 +548,95 @@ adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
     }
 });
 
+
+// Route pour afficher la page de clôture du match
+adminRouter.get('/admin/match/:matchId/cloturer', authguard, async (req, res) => {
+    const { matchId } = req.params;
+
+    try {
+        const match = await prisma.match.findUnique({
+            where: { id: parseInt(matchId) },
+            include: {
+                equipe1: true,
+                equipe2: true
+            }
+        });
+
+        if (!match) {
+            return res.status(404).json({ error: "Match non trouvé" });
+        }
+
+        if (match.cloture) {
+            return res.status(400).json({ error: "Le match est déjà clôturé" });
+        }
+
+        res.render("pages/cloturerMatch.twig", { match });
+    } catch (error) {
+        console.error("Erreur lors de la récupération du match:", error);
+        res.redirect("/admin");
+    }
+});
+
+// Route pour clôturer un match et sélectionner l'équipe gagnante
+adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) => {
+    const { matchId } = req.params;
+    const { equipeGagnanteId } = req.body;
+
+    try {
+        // Vérifier si le match existe
+        const match = await prisma.match.findUnique({
+            where: { id: parseInt(matchId) }
+        });
+
+        if (!match) {
+            return res.status(404).json({ error: "Match non trouvé" });
+        }
+
+        if (match.cloture) {
+            return res.status(400).json({ error: "Le match est déjà clôturé" });
+        }
+
+        // Vérifier si l'équipe gagnante existe
+        const equipeGagnante = await prisma.equipe.findUnique({
+            where: { id: parseInt(equipeGagnanteId) }
+        });
+
+        if (!equipeGagnante) {
+            return res.status(404).json({ error: "Équipe gagnante non trouvée" });
+        }
+
+        // Mettre à jour les paris en fonction de l'équipe gagnante
+        const paris = await prisma.paris.findMany({
+            where: { matchId: parseInt(matchId) }
+        });
+
+        for (const pari of paris) {
+            if (pari.equipe_choisie === equipeGagnante.nom) {
+                // Mise à jour des points pour les paris gagnants
+                await prisma.utilisateur.update({
+                    where: { id: pari.utilisateur_id },
+                    data: { points: { increment: pari.points_mises * 2 } }
+                });
+            } else {
+                // Mise à jour des points pour les paris perdants (rien ne change)
+                await prisma.utilisateur.update({
+                    where: { id: pari.utilisateur_id },
+                    data: { points: { decrement: pari.points_mises } }
+                });
+            }
+        }
+
+        // Marquer le match comme clôturé
+        await prisma.match.update({
+            where: { id: parseInt(matchId) },
+            data: { equipeGagnanteId: parseInt(equipeGagnanteId), cloture: true }
+        });
+
+        res.redirect('/admin');
+    } catch (error) {
+        console.error("Erreur lors de la clôture du match:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
 
 module.exports = adminRouter;

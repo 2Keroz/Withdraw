@@ -36,6 +36,8 @@ CREATE TABLE `Match` (
     `date` DATETIME(3) NOT NULL,
     `jeuId` INTEGER NOT NULL,
     `competitionId` INTEGER NOT NULL,
+    `equipeGagnanteId` INTEGER NULL,
+    `cloture` BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -50,6 +52,7 @@ CREATE TABLE `Paris` (
     `date_pari` DATETIME(3) NOT NULL,
     `perte_id` INTEGER NULL,
     `status` VARCHAR(191) NOT NULL,
+    `matchId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -127,6 +130,9 @@ ALTER TABLE `Match` ADD CONSTRAINT `Match_competitionId_fkey` FOREIGN KEY (`comp
 
 -- AddForeignKey
 ALTER TABLE `Paris` ADD CONSTRAINT `Paris_utilisateur_id_fkey` FOREIGN KEY (`utilisateur_id`) REFERENCES `Utilisateur`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Paris` ADD CONSTRAINT `Paris_matchId_fkey` FOREIGN KEY (`matchId`) REFERENCES `Match`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `PertesUtilisateurs` ADD CONSTRAINT `PertesUtilisateurs_utilisateur_id_fkey` FOREIGN KEY (`utilisateur_id`) REFERENCES `Utilisateur`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -7,7 +7,9 @@ model Paris {
   date_pari      DateTime
   perte_id       Int?
   status         String
+  matchId        Int
 
   utilisateur    Utilisateur        @relation("UtilisateurParis", fields: [utilisateur_id], references: [id])
+  match          Match              @relation("MatchParis", fields: [matchId], references: [id])
   pertesUtilisateurs PertesUtilisateurs[] @relation("ParisPertes")
 }

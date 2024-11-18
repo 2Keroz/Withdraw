@@ -1,4 +1,3 @@
-
 model Match {
     id            Int      @id @default(autoincrement())
     equipe1Id     Int      // Clé étrangère pour l'équipe 1
@@ -6,9 +5,12 @@ model Match {
     date          DateTime
     jeuId         Int
     competitionId Int
+    equipeGagnanteId Int?
+    cloture       Boolean  @default(false)
 
     equipe1       Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id])
     equipe2       Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id])
     jeu           Jeu       @relation(fields: [jeuId], references: [id])
     competition   Competition @relation(fields: [competitionId], references: [id])
+    paris         Paris[]   @relation("MatchParis")
 }

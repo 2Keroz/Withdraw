@@ -1,0 +1,24 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+    <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Clôturer le Match</h1>
+            <form action="/admin/match/{{ match.id }}/cloturer" method="POST">
+                <!-- Sélection de l'équipe gagnante -->
+                <div class="mb-4">
+                    <label for="equipeGagnanteId" class="block text-sm font-medium text-gray-700">Équipe gagnante</label>
+                    <select name="equipeGagnanteId" id="equipeGagnanteId" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
+                        <option value="">-- Sélectionnez l'équipe gagnante --</option>
+                        <option value="{{ match.equipe1.id }}" {% if match.equipeGagnanteId == match.equipe1.id %}selected{% endif %}>{{ match.equipe1.nom }}</option>
+                        <option value="{{ match.equipe2.id }}" {% if match.equipeGagnanteId == match.equipe2.id %}selected{% endif %}>{{ match.equipe2.nom }}</option>
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Clôturer le Match</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

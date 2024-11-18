@@ -120,5 +120,23 @@ homeRouter.get('/home/competitions/:competitionId/matchs', authguard, async (req
     }
 });
 
+// Route pour récupérer les matchs passés
+homeRouter.get('/home/matchs-passes', authguard, async (req, res) => {
+    try {
+        const matchsPasses = await prisma.match.findMany({
+            where: { date: { lt: new Date() } }, // Matchs passés
+            orderBy: { date: 'desc' },
+            include: {
+                equipe1: { select: { nom: true } },
+                equipe2: { select: { nom: true } }
+            }
+        });
+        res.json(matchsPasses); // Retourne les matchs passés en JSON
+    } catch (error) {
+        console.error("Erreur lors de la récupération des matchs passés:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
 
 module.exports = homeRouter;

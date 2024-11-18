@@ -1,7 +1,7 @@
 const userRouter = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const authguard = require('../../services/authguard');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
@@ -64,7 +64,6 @@ userRouter.post('/profil/modifier', authguard, async (req, res) => {
             }
         });
 
-
         const updateData = {
             nom,
             prenom,
@@ -89,7 +88,6 @@ userRouter.post('/profil/modifier', authguard, async (req, res) => {
             where: { email: req.session.utilisateur.email },
             data: updateData
         });
-
 
         req.session.utilisateur = updatedUser;
 
@@ -119,7 +117,7 @@ userRouter.post('/profil/supprimer', authguard, async (req, res) => {
         });
     } catch (error) {
         console.error("Erreur lors de la suppression du compte :", error);
-        res.redirect('/profil'); 
+        res.redirect('/profil');
     }
 });
 
@@ -134,5 +132,77 @@ userRouter.post('/home/deconnexion', (req, res) => {
     });
 });
 
+userRouter.post('/parier', authguard, async (req, res) => {
+    try {
+        const { match_id, equipe_choisie, points_mises } = req.body;
+        const utilisateurId = req.session.utilisateur.id;
+
+        const utilisateur = await prisma.utilisateur.findUnique({
+            where: { id: utilisateurId },
+        });
+
+        if (!utilisateur || utilisateur.points < points_mises) {
+            return res.redirect('/home?error=pointsInsuffisants');
+        }
+
+        // Créer le pari
+        await prisma.paris.create({
+            data: {
+                utilisateur: utilisateurId,
+                paris_id: parseInt(match_id, 10),
+                equipe_choisie,
+                points_mises: parseInt(points_mises, 10),
+                date_pari: new Date(),
+                status: 'EN_COURS',
+                utilisateur: {
+                    connect: { id: utilisateurId }
+                },
+                match: {
+                    connect: { id: parseInt(match_id, 10) }
+                }
+            },
+        });
+
+        // Mettre à jour les points de l'utilisateur
+        await prisma.utilisateur.update({
+            where: { id: utilisateurId },
+            data: { points: utilisateur.points - points_mises },
+        });
+
+        res.redirect('/home');
+    } catch (error) {
+        console.error("Erreur lors de la création du pari :", error);
+        res.redirect('/home?error=parisErreur');
+    }
+});
+
+userRouter.get('/mes-paris', authguard, async (req, res) => {
+    try {
+        const utilisateurId = req.session.utilisateur.id;
+
+        // Récupérer les paris de l'utilisateur
+        const paris = await prisma.paris.findMany({
+            where: { utilisateur_id: utilisateurId },
+            include: {
+                utilisateur: true, // Si vous souhaitez inclure les pertes liées aux paris
+            },
+            orderBy: {
+                date_pari: 'desc', // Tri des paris du plus récent au plus ancien
+            },
+        });
+
+        const parisEnCours = paris.filter(pari => pari.status === 'EN_COURS');
+        const parisTermines = paris.filter(pari => pari.status !== 'EN_COURS');
+
+        res.render('pages/mesParis.twig', {
+            parisEnCours,
+            parisTermines,
+            utilisateur: req.session.utilisateur,
+        });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des paris :", error);
+        res.redirect('/home?error=parisErreur');
+    }
+});
 
 module.exports = userRouter;

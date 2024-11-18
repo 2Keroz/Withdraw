@@ -1,0 +1,41 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full mx-auto max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden p-8">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Mes Paris</h1>
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Paris en cours</h2>
+        {% if parisEnCours is not empty %}
+            <ul class="space-y-4">
+                {% for pari in parisEnCours %}
+                    <li class="p-4 border border-gray-300 rounded-md">
+                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
+                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
+                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
+                        <p><strong>Status :</strong> {{ pari.status }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">Aucun pari en cours.</p>
+        {% endif %}
+
+        <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Paris terminés</h2>
+        {% if parisTermines is not empty %}
+            <ul class="space-y-4">
+                {% for pari in parisTermines %}
+                    <li class="p-4 border border-gray-300 rounded-md">
+                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
+                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
+                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
+                        <p><strong>Status :</strong> {{ pari.status }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">Aucun pari terminé.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
