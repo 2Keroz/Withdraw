@@ -142,7 +142,7 @@ userRouter.post('/parier', authguard, async (req, res) => {
         });
 
         if (!utilisateur || utilisateur.points < points_mises) {
-            return res.redirect('/home?error=pointsInsuffisants');
+            return res.redirect('/home');
         }
 
         // Créer le pari
@@ -201,7 +201,7 @@ userRouter.get('/mes-paris', authguard, async (req, res) => {
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des paris :", error);
-        res.redirect('/home?error=parisErreur');
+        res.redirect('/home');
     }
 });
 

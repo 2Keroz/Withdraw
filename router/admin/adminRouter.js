@@ -617,12 +617,6 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
                     where: { id: pari.utilisateur_id },
                     data: { points: { increment: pari.points_mises * 2 } }
                 });
-            } else {
-                // Mise à jour des points pour les paris perdants (rien ne change)
-                await prisma.utilisateur.update({
-                    where: { id: pari.utilisateur_id },
-                    data: { points: { decrement: pari.points_mises } }
-                });
             }
         }
 
@@ -638,5 +632,30 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
+
+adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            // Supprimer les paris associés au match
+            await prisma.paris.deleteMany({
+                where: { matchId: parseInt(id) }
+            });
+
+            // Supprimer le match
+            await prisma.match.delete({
+                where: { id: parseInt(id) }
+            });
+
+            res.redirect('/admin');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression du match:", error);
+        res.redirect("/admin");
+    }
+});
+
 
 module.exports = adminRouter;
