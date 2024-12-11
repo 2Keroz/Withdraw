@@ -579,17 +579,20 @@ adminRouter.get('/admin/match/:id/modifier', authguard, async (req, res) => {
         res.redirect("/admin");
     }
 });
+
 //////////////////////////////////////////////////////////////////////////// Route modif match ////////////////////////////////////////////////////////////////////////////
 adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
     try {
         const { id } = req.params;
-        const { equipe1, equipe2, date } = req.body;
+        const { jeuId, competitionId, equipe1Id, equipe2Id, date } = req.body;
 
         await prisma.match.update({
             where: { id: parseInt(id) },
             data: {
-                equipe1,
-                equipe2,
+                jeuId: parseInt(jeuId),
+                competitionId: parseInt(competitionId),
+                equipe1Id: parseInt(equipe1Id),
+                equipe2Id: parseInt(equipe2Id),
                 date: new Date(date), // Assurez-vous que la date est au format Date
             },
         });

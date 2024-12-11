@@ -59,76 +59,12 @@
         </div>
     </div>
 
-    <!-- Script JavaScript pour filtrer les compétitions et équipes -->
     <script>
         const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
+        const matchJeuId = {{ match.jeuId }};
+        const matchCompetitionId = {{ match.competitionId }};
         const equipe1Id = {{ match.equipe1Id }};
         const equipe2Id = {{ match.equipe2Id }};
-
-        async function getEquipes(competitionId) {
-            const response = await fetch(`/admin/equipes/${competitionId}`);
-
-            if (!response.ok) {
-                console.error("Erreur lors de la récupération des équipes :", response.statusText);
-                return [];
-            }
-
-            const data = await response.json();
-            return data;
-        }
-
-        async function filtrerEquipes() {
-            const competitionId = document.getElementById("competitionId").value;
-            const equipe1Select = document.getElementById("equipe1Id");
-            const equipe2Select = document.getElementById("equipe2Id");
-
-            equipe1Select.innerHTML = '<option value="">-- Sélectionnez l\'équipe 1 --</option>';
-            equipe2Select.innerHTML = '<option value="">-- Sélectionnez l\'équipe 2 --</option>';
-
-            if (competitionId) {
-                const equipes = await getEquipes(competitionId);
-                if (equipes.length === 0) {
-                    console.warn("Aucune équipe trouvée pour la compétition sélectionnée.");
-                }
-                equipes.forEach(equipe => {
-                    const option1 = document.createElement('option');
-                    option1.value = equipe.id;
-                    option1.textContent = equipe.nom;
-                    if (equipe.id === equipe1Id) option1.selected = true; // Pré-sélectionner l'équipe 1
-                    equipe1Select.appendChild(option1);
-
-                    const option2 = document.createElement('option');
-                    option2.value = equipe.id;
-                    option2.textContent = equipe.nom;
-                    if (equipe.id === equipe2Id) option2.selected = true; // Pré-sélectionner l'équipe 2
-                    equipe2Select.appendChild(option2);
-                });
-            }
-        }
-
-        function filtrerCompetitions() {
-            const jeuId = document.getElementById("jeuId").value;
-            const competitionSelect = document.getElementById("competitionId");
-
-            competitionSelect.innerHTML = '<option value="">-- Sélectionnez une compétition --</option>';
-
-            if (competitionsByJeu[jeuId]) {
-                competitionsByJeu[jeuId].forEach(competition => {
-                    const option = document.createElement('option');
-                    option.value = competition.id;
-                    option.textContent = competition.nom;
-                    competitionSelect.appendChild(option);
-                });
-            }
-            filtrerEquipes(); // Reset équipes à chaque changement de compétition
-        }
-
-        // Appel initial pour pré-remplir les sélections
-        window.onload = () => {
-            document.getElementById("jeuId").value = {{ match.jeuId }};
-            filtrerCompetitions();
-            document.getElementById("competitionId").value = {{ match.competitionId }};
-            filtrerEquipes();
-        }
     </script>
+    <script src="/js/script.js"></script>
 {% endblock %}
