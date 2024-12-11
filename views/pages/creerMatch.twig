@@ -51,6 +51,7 @@
 				<div class="mb-4">
 					<label for="date" class="block text-sm font-medium text-gray-700">Date et Heure</label>
 					<input type="datetime-local" name="date" id="date" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
+					<p id="dateError" class="text-red-500 text-sm mt-2 hidden">La date et l'heure sélectionnées doivent être supérieures à la date actuelle.</p>
 				</div>
 
 				<div class="text-center">
@@ -121,5 +122,20 @@ competitionSelect.appendChild(option);
 }
 filtrerEquipes(); // Reset équipes à chaque changement de compétition
 }
+
+document.querySelector('form').addEventListener('submit', function (event) {
+const dateInput = document.getElementById('date').value;
+const selectedDate = new Date(dateInput);
+const currentDate = new Date();
+const errorElement = document.getElementById('dateError');
+
+// Réinitialiser l'affichage du message d'erreur
+errorElement.classList.add('hidden');
+
+if (selectedDate < currentDate) {
+event.preventDefault(); // Empêche l'envoi du formulaire
+errorElement.classList.remove('hidden'); // Affiche le message d'erreur
+}
+});
 	</script>
 {% endblock %}

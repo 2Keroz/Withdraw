@@ -27,9 +27,22 @@
                 {% for pari in parisTermines %}
                     <li class="p-4 border border-gray-300 rounded-md">
                         <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
-                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
                         <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
-                        <p><strong>Status :</strong> {{ pari.status }}</p>
+                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
+                        <p><strong>Gain :</strong>
+                            <span class="{% if pari.status == 'GAGNE' %}text-green-600{% else %}text-red-600{% endif %}">
+                                {% if pari.status == 'GAGNE' %}
+                                    {{ pari.points_mises * 2 }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
+                        </p>
+                        <p><strong>Status :</strong>
+                            <span class="{% if pari.status == 'GAGNE' %}text-green-600{% else %}text-red-600{% endif %}">
+                                {{ pari.status }}
+                            </span>
+                        </p>
                     </li>
                 {% endfor %}
             </ul>

@@ -1029,3 +1029,13 @@ video {
     padding-right: 2rem;
   }
 }
+
+.text-green-600 {
+  color: #10b981; /* Couleur verte */
+  font-weight: bold;
+}
+
+.text-red-600 {
+  color: #e53e3e; /* Couleur rouge */
+  font-weight: bold;
+}

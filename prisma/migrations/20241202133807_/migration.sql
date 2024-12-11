@@ -117,6 +117,9 @@ ALTER TABLE `Equipe` ADD CONSTRAINT `Equipe_jeuId_fkey` FOREIGN KEY (`jeuId`) RE
 ALTER TABLE `Equipe` ADD CONSTRAINT `Equipe_competitionId_fkey` FOREIGN KEY (`competitionId`) REFERENCES `Competition`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Match` ADD CONSTRAINT `Match_equipeGagnanteId_fkey` FOREIGN KEY (`equipeGagnanteId`) REFERENCES `Equipe`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `Match` ADD CONSTRAINT `Match_equipe1Id_fkey` FOREIGN KEY (`equipe1Id`) REFERENCES `Equipe`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey

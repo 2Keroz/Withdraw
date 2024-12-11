@@ -8,4 +8,6 @@ model Equipe {
     competitionId Int
     matchsAsEquipe1 Match[]   @relation("Equipe1")  // Relation avec les matchs en tant qu'équipe 1
     matchsAsEquipe2 Match[]   @relation("Equipe2")  // Relation avec les matchs en tant qu'équipe 2
+    matchsGagnes    Match[]  @relation("EquipeGagnante") // Relation inverse pour equipeGagnante
+
 }

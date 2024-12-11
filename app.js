@@ -10,6 +10,7 @@ const adminRouter = require("./router/admin/adminRouter");
 const userRouter = require("./router/users/userRouter");
 const resetPasswordRouter = require("./router/users/resetPasswordRouter");
 
+require("dotenv").config()
 
 const app = express(); // on lance le server
 app.use(express.static("./public"))
@@ -27,6 +28,6 @@ app.use(adminRouter)
 app.use(userRouter)
 app.use(resetPasswordRouter)
 
-app.listen(3000, ()=>{
-    console.log("Connecté sur le port 3000");  
+app.listen(process.env.PORT, ()=>{
+    console.log(`Connecté sur le port ${process.env.PORT}`);
 })

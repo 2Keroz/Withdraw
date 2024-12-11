@@ -10,14 +10,46 @@ adminRouter.get('/admin', authguard, async (req, res) => {
             let utilisateurs = await prisma.utilisateur.findMany();
             const matchs = await prisma.match.findMany({
                 include: {
-                    equipe1: { select: { nom: true } },
-                    equipe2: { select: { nom: true } },
-                    // equipeGagnante: { select: { nom: true } } // Inclure l'équipe gagnante
+                    equipe1: {
+                        select: {
+                            nom: true
+                        }
+                    },
+                    equipe2: {
+                        select: {
+                            nom: true
+                        }
+                    },
+                    jeu: {
+                        select: {
+                            nom: true
+                        }
+                    },
+                    competition: {
+                        select: {
+                            nom: true
+                        }
+                    },
+                    equipeGagnante: {  // Relation via equipeGagnanteId
+                        select: {
+                            nom: true
+                        }
+                    }
+                },
+                orderBy: {
+                    date: 'asc'
                 }
             });
 
             const matchsClotures = matchs.filter(match => match.cloture);
             const matchsNonClotures = matchs.filter(match => !match.cloture);
+
+            // Assurez-vous de gérer les cas où equipeGagnante est null
+            matchsClotures.forEach(match => {
+                if (!match.equipeGagnante) {
+                    match.equipeGagnante = { nom: "Aucune équipe gagnante" }; // Valeur par défaut
+                }
+            });
 
             return res.render("pages/admin.twig", { utilisateurs, matchsNonClotures, matchsClotures });
         }
@@ -477,9 +509,29 @@ adminRouter.get('/admin/match/:id/supprimer', authguard, async (req, res) => {
     try {
         const { id } = req.params;
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            // Récupérer les paris associés au match
+            const paris = await prisma.paris.findMany({
+                where: { matchId: parseInt(id) }
+            });
+
+            // Mettre à jour les points des utilisateurs
+            for (const pari of paris) {
+                await prisma.utilisateur.update({
+                    where: { id: pari.utilisateur_id },
+                    data: { points: { increment: pari.points_mises } }
+                });
+            }
+
+            // Supprimer les paris associés au match
+            await prisma.paris.deleteMany({
+                where: { matchId: parseInt(id) }
+            });
+
+            // Supprimer le match
             await prisma.match.delete({
                 where: { id: parseInt(id) }
             });
+
             res.redirect('/admin');
         } else {
             res.redirect("/home");
@@ -489,6 +541,7 @@ adminRouter.get('/admin/match/:id/supprimer', authguard, async (req, res) => {
         res.redirect("/admin");
     }
 });
+
 
 //////////////////////////////////////////////////////////////////////////// Route form modif match ////////////////////////////////////////////////////////////////////////////
 adminRouter.get('/admin/match/:id/modifier', authguard, async (req, res) => {
@@ -617,6 +670,17 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
                     where: { id: pari.utilisateur_id },
                     data: { points: { increment: pari.points_mises * 2 } }
                 });
+                // Mettre à jour le statut du pari
+                await prisma.paris.update({
+                    where: { id: pari.id },
+                    data: { status: 'GAGNE' }
+                });
+            } else {
+                // Mettre à jour le statut du pari
+                await prisma.paris.update({
+                    where: { id: pari.id },
+                    data: { status: 'PERDU' }
+                });
             }
         }
 
@@ -632,6 +696,7 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
+
 
 adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
     try {
@@ -656,6 +721,9 @@ adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
         res.redirect("/admin");
     }
 });
+
+///////////////////////////////////////////////////////////////////////// BARRE DE RECHERCHE /////////////////////////////////////////////////////////////////////////
+
 
 
 module.exports = adminRouter;

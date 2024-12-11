@@ -1,16 +1,17 @@
 model Match {
-    id            Int      @id @default(autoincrement())
-    equipe1Id     Int      // Clé étrangère pour l'équipe 1
-    equipe2Id     Int      // Clé étrangère pour l'équipe 2
-    date          DateTime
-    jeuId         Int
-    competitionId Int
-    equipeGagnanteId Int?
-    cloture       Boolean  @default(false)
+  id               Int      @id @default(autoincrement())
+  equipe1Id        Int
+  equipe2Id        Int
+  date             DateTime
+  jeuId            Int
+  competitionId    Int
+  equipeGagnanteId Int?
+  cloture          Boolean  @default(false)
+  equipeGagnante   Equipe?  @relation("EquipeGagnante", fields: [equipeGagnanteId], references: [id]) // Relation à Equipe
 
-    equipe1       Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id])
-    equipe2       Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id])
-    jeu           Jeu       @relation(fields: [jeuId], references: [id])
-    competition   Competition @relation(fields: [competitionId], references: [id])
-    paris         Paris[]   @relation("MatchParis")
+  equipe1          Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id]) // Relation à l'équipe 1
+  equipe2          Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id]) // Relation à l'équipe 2
+  jeu              Jeu       @relation(fields: [jeuId], references: [id]) // Relation au jeu
+  competition      Competition @relation(fields: [competitionId], references: [id]) // Relation à la compétition
+  paris            Paris[]   @relation("MatchParis") // Relation aux paris
 }
