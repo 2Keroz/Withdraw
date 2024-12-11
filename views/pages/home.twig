@@ -180,16 +180,21 @@ hour: '2-digit',
 minute: '2-digit'
 });
 
+let gagnantText = match.cloture ? `Équipe gagnante : <b>${
+match.equipeGagnante.nom
+} </b>` : "<b>Match pas encore clôturé</b>";
+
 return `
-                            <li class="p-4 border border-gray-300 rounded-md">
-                                <h3 class="text-lg font-bold">${
+                    <li class="p-4 border border-gray-300 rounded-md">
+                        <h3 class="text-lg font-bold">${
 match.equipe1.nom
 } vs ${
 match.equipe2.nom
 }</h3>
-                                <p class="text-gray-600">Date : ${formattedDate} à ${formattedTime}</p>
-                            </li>
-                        `;
+                        <p class="text-gray-600">Date : ${formattedDate} à ${formattedTime}</p>
+                        <p class="text-gray-600">${gagnantText}</p>
+                    </li>
+                `;
 }).join('') + '</ul>';
 } else {
 matchsPassesContainer.innerHTML = '<p class="text-gray-600">Aucun match passé pour le moment.</p>';

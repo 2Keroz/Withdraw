@@ -128,7 +128,8 @@ homeRouter.get('/home/matchs-passes', authguard, async (req, res) => {
             orderBy: { date: 'desc' },
             include: {
                 equipe1: { select: { nom: true } },
-                equipe2: { select: { nom: true } }
+                equipe2: { select: { nom: true } },
+                equipeGagnante: { select: { nom: true } } // Inclure l'équipe gagnante
             }
         });
         res.json(matchsPasses); // Retourne les matchs passés en JSON
