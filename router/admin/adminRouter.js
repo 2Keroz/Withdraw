@@ -724,6 +724,131 @@ adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
 
 ///////////////////////////////////////////////////////////////////////// BARRE DE RECHERCHE /////////////////////////////////////////////////////////////////////////
 
+// Barre de recherche utilisateur
+adminRouter.get('/admin/utilisateurs/recherche', authguard, async (req, res) => {
+    try {
+        const query = req.query.query;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            let utilisateurs = await prisma.utilisateur.findMany({
+                where: {
+                    OR: [
+                        { nom: { contains: query } },
+                        { prenom: { contains: query } },
+                        { email: { contains: query } }
+                    ]
+                }
+            });
+            const matchs = await prisma.match.findMany({
+                include: {
+                    equipe1: { select: { nom: true } },
+                    equipe2: { select: { nom: true } },
+                    jeu: { select: { nom: true } },
+                    competition: { select: { nom: true } },
+                    equipeGagnante: { select: { nom: true } }
+                },
+                orderBy: { date: 'asc' }
+            });
+
+            const matchsClotures = matchs.filter(match => match.cloture);
+            const matchsNonClotures = matchs.filter(match => !match.cloture);
+
+            matchsClotures.forEach(match => {
+                if (!match.equipeGagnante) {
+                    match.equipeGagnante = { nom: "Aucune équipe gagnante" };
+                }
+            });
+
+            return res.render("pages/admin.twig", { utilisateurs, matchsNonClotures, matchsClotures });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.redirect("/home");
+    }
+});
+
+// Barre de recherhe match non cloturé
+adminRouter.get('/admin/matchs/non-clotures/recherche', authguard, async (req, res) => {
+    try {
+        const query = req.query.query;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const utilisateurs = await prisma.utilisateur.findMany();
+            const matchs = await prisma.match.findMany({
+                include: {
+                    equipe1: { select: { nom: true } },
+                    equipe2: { select: { nom: true } },
+                    jeu: { select: { nom: true } },
+                    competition: { select: { nom: true } },
+                    equipeGagnante: { select: { nom: true } }
+                },
+                orderBy: { date: 'asc' }
+            });
+
+            const matchsNonClotures = matchs.filter(match =>
+                !match.cloture && (
+                    match.equipe1.nom.includes(query) ||
+                    match.equipe2.nom.includes(query)
+                )
+            );
+
+            const matchsClotures = matchs.filter(match => match.cloture);
+
+            matchsClotures.forEach(match => {
+                if (!match.equipeGagnante) {
+                    match.equipeGagnante = { nom: "Aucune équipe gagnante" };
+                }
+            });
+
+            return res.render("pages/admin.twig", { utilisateurs, matchsNonClotures, matchsClotures });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching non-clotures matches:", error);
+        res.redirect("/home");
+    }
+});
+
+// Barre de recherhe match cloturé
+adminRouter.get('/admin/matchs/clotures/recherche', authguard, async (req, res) => {
+    try {
+        const query = req.query.query;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const utilisateurs = await prisma.utilisateur.findMany();
+            const matchs = await prisma.match.findMany({
+                include: {
+                    equipe1: { select: { nom: true } },
+                    equipe2: { select: { nom: true } },
+                    jeu: { select: { nom: true } },
+                    competition: { select: { nom: true } },
+                    equipeGagnante: { select: { nom: true } }
+                },
+                orderBy: { date: 'asc' }
+            });
+
+            const matchsClotures = matchs.filter(match =>
+                match.cloture && (
+                    match.equipe1.nom.includes(query) ||
+                    match.equipe2.nom.includes(query)
+                )
+            );
+
+            const matchsNonClotures = matchs.filter(match => !match.cloture);
+
+            matchsClotures.forEach(match => {
+                if (!match.equipeGagnante) {
+                    match.equipeGagnante = { nom: "Aucune équipe gagnante" };
+                }
+            });
+
+            return res.render("pages/admin.twig", { utilisateurs, matchsNonClotures, matchsClotures });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching clotures matches:", error);
+        res.redirect("/home");
+    }
+});
+
 
 
 module.exports = adminRouter;
