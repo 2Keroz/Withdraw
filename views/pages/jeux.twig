@@ -1,0 +1,39 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+    <div>
+        <div>
+            <div>
+                <div>
+                    <h1>Liste des Jeux</h1>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for jeu in jeux %}
+                                    <tr>
+                                        <td>{{ jeu.id }}</td>
+                                        <td>{{ jeu.nom }}</td>
+                                        <td>{{ jeu.description }}</td>
+                                        <td>
+                                            <form action="/admin/jeu/{{ jeu.id }}/supprimer" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

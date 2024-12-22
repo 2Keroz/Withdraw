@@ -9,8 +9,8 @@ model Match {
   cloture          Boolean  @default(false)
   equipeGagnante   Equipe?  @relation("EquipeGagnante", fields: [equipeGagnanteId], references: [id]) // Relation à Equipe
 
-  equipe1          Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id]) // Relation à l'équipe 1
-  equipe2          Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id]) // Relation à l'équipe 2
+  equipe1          Equipe    @relation("Equipe1", fields: [equipe1Id], references: [id], onDelete: Cascade) // Relation à l'équipe 1
+  equipe2          Equipe    @relation("Equipe2", fields: [equipe2Id], references: [id], onDelete: Cascade) // Relation à l'équipe 2
   jeu              Jeu       @relation(fields: [jeuId], references: [id]) // Relation au jeu
   competition      Competition @relation(fields: [competitionId], references: [id]) // Relation à la compétition
   paris            Paris[]   @relation("MatchParis") // Relation aux paris

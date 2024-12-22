@@ -1,14 +1,14 @@
 {% extends "../layouts/base.twig" %}
 
 {% block main %}
-    <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
-            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Modifier le Match</h1>
+    <div>
+        <div>
+            <h1>Modifier le Match</h1>
             <form action="/admin/match/{{ match.id }}/modifier" method="POST">
                 <!-- Sélection du jeu -->
-                <div class="mb-4">
-                    <label for="jeuId" class="block text-sm font-medium text-gray-700">Jeu</label>
-                    <select name="jeuId" id="jeuId" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required onchange="filtrerCompetitions()">
+                <div>
+                    <label for="jeuId">Jeu</label>
+                    <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
                         <option value="">-- Sélectionnez un jeu --</option>
                         {% for jeu in jeux %}
                             <option value="{{ jeu.id }}" {% if jeu.id == match.jeuId %}selected{% endif %}>{{ jeu.nom }}</option>
@@ -17,9 +17,9 @@
                 </div>
 
                 <!-- Sélection de la compétition -->
-                <div class="mb-4">
-                    <label for="competitionId" class="block text-sm font-medium text-gray-700">Compétition</label>
-                    <select name="competitionId" id="competitionId" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required onchange="filtrerEquipes()">
+                <div>
+                    <label for="competitionId">Compétition</label>
+                    <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()">
                         <option value="">-- Sélectionnez une compétition --</option>
                         {% for jeuId, competitions in competitionsByJeu %}
                             <optgroup label="Jeu ID: {{ jeuId }}">
@@ -32,33 +32,36 @@
                 </div>
 
                 <!-- Sélection des équipes -->
-                <div class="mb-4">
-                    <label for="equipe1Id" class="block text-sm font-medium text-gray-700">Équipe 1</label>
-                    <select name="equipe1Id" id="equipe1Id" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
+                <div>
+                    <label for="equipe1Id">Équipe 1</label>
+                    <select name="equipe1Id" id="equipe1Id" required>
                         <option value="">-- Sélectionnez l'équipe 1 --</option>
                     </select>
                 </div>
 
-                <div class="mb-4">
-                    <label for="equipe2Id" class="block text-sm font-medium text-gray-700">Équipe 2</label>
-                    <select name="equipe2Id" id="equipe2Id" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
+                <div>
+                    <label for="equipe2Id">Équipe 2</label>
+                    <select name="equipe2Id" id="equipe2Id" required>
                         <option value="">-- Sélectionnez l'équipe 2 --</option>
                     </select>
                 </div>
 
                 <!-- Champ pour la date et l'heure -->
-                <div class="mb-4">
-                    <label for="date" class="block text-sm font-medium text-gray-700">Date et Heure</label>
-                    <input type="datetime-local" name="date" id="date" value="{{ match.date|date('Y-m-d\TH:i') }}" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
+                <div>
+                    <label for="date">Date et Heure</label>
+                    <input type="datetime-local" name="date" id="date" value="{{ match.date|date('Y-m-d\TH:i') }}" required>
                 </div>
 
-                <div class="text-center">
-                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Modifier le Match</button>
+                <div>
+                    <button type="submit">Modifier le Match</button>
                 </div>
             </form>
         </div>
     </div>
+{% endblock %}
 
+{% block script %}
+<script src="/js/script.js"></script>
     <script>
         const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
         const matchJeuId = {{ match.jeuId }};
@@ -66,5 +69,4 @@
         const equipe1Id = {{ match.equipe1Id }};
         const equipe2Id = {{ match.equipe2Id }};
     </script>
-    <script src="/js/script.js"></script>
 {% endblock %}

@@ -1,0 +1,41 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+    <div>
+        <div>
+            <div>
+                <div>
+                    <h1>Liste des Compétitions</h1>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Jeu</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for competition in competitions %}
+                                    <tr>
+                                        <td>{{ competition.id }}</td>
+                                        <td>{{ competition.nom }}</td>
+                                        <td>{{ competition.description }}</td>
+                                        <td>{{ competition.jeu.nom }}</td>
+                                        <td>
+                                            <form action="/admin/competition/{{ competition.id }}/supprimer" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

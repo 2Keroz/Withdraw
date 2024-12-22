@@ -853,5 +853,119 @@ adminRouter.get('/admin/matchs/clotures/recherche', authguard, async (req, res) 
 });
 
 
+/////////////////////////////////////////////////////// ROUTE POUR JEUX / COMPETITIONS / EQUIPES ///////////////////////////////////////////////////////
+
+
+///////////////////// JEUX /////////////////////
+// Route pour afficher tous les jeux
+adminRouter.get('/admin/jeux', authguard, async (req, res) => {
+    try {
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const jeux = await prisma.jeu.findMany();
+            return res.render("pages/jeux.twig", { jeux });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching games:", error);
+        res.redirect("/admin");
+    }
+});
+
+// Route suppresion jeu
+adminRouter.post('/admin/jeu/:id/supprimer', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.jeu.delete({
+                where: { id: parseInt(id) }
+            });
+            res.redirect('/admin/jeux');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression du jeu:", error);
+        res.redirect("/admin");
+    }
+});
+
+//////////// COMPETITIONS ////////
+
+// Route pour afficher toutes les compétitions
+adminRouter.get('/admin/competitions', authguard, async (req, res) => {
+    try {
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const competitions = await prisma.competition.findMany({
+                include: { jeu: true }
+            });
+            return res.render("pages/competitions.twig", { competitions });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching competitions:", error);
+        res.redirect("/admin");
+    }
+});
+
+// Route suppression compétitions 
+adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.competition.delete({
+                where: { id: parseInt(id) }
+            });
+            res.redirect('/admin/competitions');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la compétition:", error);
+        res.redirect("/admin");
+    }
+});
+
+
+/////////////// EQUIPES //////////////////
+
+// Route pour afficher toutes les équipes
+adminRouter.get('/admin/equipes', authguard, async (req, res) => {
+    try {
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const equipes = await prisma.equipe.findMany({
+                include: {
+                    jeu: true,
+                    competition: true
+                }
+            });
+            return res.render("pages/equipes.twig", { equipes });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching teams:", error);
+        res.redirect("/admin");
+    }
+});
+
+// Route suppression équipe
+adminRouter.post('/admin/equipe/:id/supprimer', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.equipe.delete({
+                where: { id: parseInt(id) }
+            });
+            res.redirect('/admin/equipes');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression de l'équipe:", error);
+        res.redirect("/admin");
+    }
+});
+
+
+
 
 module.exports = adminRouter;

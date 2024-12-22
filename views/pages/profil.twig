@@ -1,26 +1,22 @@
 {% extends "../layouts/base.twig" %}
 
 {% block main %}
-<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="px-6 py-8">
-            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Mon Profil</h1>
-            <div class="space-y-4 mb-6">
-                <p class="text-gray-700"><span class="font-semibold">Nom :</span> {{ utilisateur.nom }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Prénom :</span> {{ utilisateur.prenom }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Email :</span> {{ utilisateur.email }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Mes points :</span> <span class="text-red-600 font-bold">{{ utilisateur.points }}</span></p>
+    <div>
+        <div>
+            <h1>Mon Profil</h1>
+            <div>
+                <p><span>Nom :</span> {{ utilisateur.nom }}</p>
+                <p><span>Prénom :</span> {{ utilisateur.prenom }}</p>
+                <p><span>Email :</span> {{ utilisateur.email }}</p>
+                <p><span>Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
+                <p><span>Mes points :</span> <span>{{ utilisateur.points }}</span></p>
             </div>
-            <div class="space-y-4">
-                <a href="/modifierProfil" class="block w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 text-center transition duration-300">Modifier profil</a>
+            <div>
+                <a href="/modifierProfil">Modifier profil</a>
                 <form action="/profil/supprimer" method="POST">
-                    <button type="submit" class="w-full bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 text-center transition duration-300">
-                        Supprimer mon compte
-                    </button>
+                    <button type="submit">Supprimer mon compte</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

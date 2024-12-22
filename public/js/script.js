@@ -1,10 +1,36 @@
+// Vérification de la date et de l'heure du match
+document.querySelector('form').addEventListener('submit', function (event) {
+    const dateInput = document.getElementById('date').value;
+    const selectedDate = new Date(dateInput);
+    const currentDate = new Date();
+    const errorElement = document.getElementById('dateError');
+
+    errorElement.classList.add('hidden');
+
+    if (selectedDate < currentDate) {
+        event.preventDefault();
+        errorElement.classList.remove('hidden');
+        errorElement.textContent = "Erreur de date: La date sélectionnée est antérieure à la date actuelle.";
+        console.log("Erreur de date: La date sélectionnée est antérieure à la date actuelle.");
+    }
+});
+
+// Appel initial pour pré-remplir les sélections
+window.onload = () => {
+    if (typeof matchJeuId !== 'undefined' && matchJeuId !== null) {
+        document.getElementById("jeuId").value = matchJeuId;
+        filtrerCompetitions();
+        document.getElementById("competitionId").value = matchCompetitionId;
+        filtrerEquipes().then(() => {
+            document.getElementById("equipe1Id").value = equipe1Id;
+            document.getElementById("equipe2Id").value = equipe2Id;
+        });
+    }
+};
+
 function filtrerCompetitions() {
     const jeuId = document.getElementById("jeuId").value;
     const competitionSelect = document.getElementById("competitionId");
-
-    console.log("Jeu sélectionné:", jeuId);
-    console.log("Compétitions par jeu:", competitionsByJeu);
-
     competitionSelect.innerHTML = '<option value="">-- Sélectionnez une compétition --</option>';
 
     if (competitionsByJeu[jeuId]) {
@@ -88,12 +114,28 @@ function loadCompetitions(jeuId) {
 function loadMatchs(competitionId) {
     fetch(`/home/competitions/${competitionId}/matchs`).then(response => response.json()).then(matchs => {
         const matchsContainer = document.getElementById('matchs-container');
-        matchsContainer.innerHTML = '<ul class="space-y-4">' + matchs.map(match => `
-            <li class="p-4 border border-gray-300 rounded-md">
-                <h3 class="text-lg font-bold">${match.equipe1.nom} vs ${match.equipe2.nom}</h3>
-                <p class="text-gray-600">Date : ${new Date(match.date).toLocaleDateString()} à ${new Date(match.date).toLocaleTimeString()}</p>
-            </li>
-        `).join('') + '</ul>';
+        matchsContainer.innerHTML = ''; // Clear previous content
+        if (matchs.length === 0) {
+            const noMatchMessage = document.createElement('p');
+            noMatchMessage.textContent = "Aucun match à venir pour le moment.";
+            matchsContainer.appendChild(noMatchMessage);
+        } else {
+            const ul = document.createElement('ul');
+            ul.className = 'space-y-4';
+            matchs.forEach(match => {
+                const date = new Date(match.date);
+                const formattedDate = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                const formattedTime = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                const li = document.createElement('li');
+                li.className = 'p-4 border border-gray-300 rounded-md';
+                li.innerHTML = `
+                    <h3 class="text-lg font-bold">${match.equipe1.nom} vs ${match.equipe2.nom}</h3>
+                    <p class="text-gray-600">Date : ${formattedDate} à ${formattedTime}</p>
+                `;
+                ul.appendChild(li);
+            });
+            matchsContainer.appendChild(ul);
+        }
     }).catch(error => console.error("Erreur lors du chargement des matchs:", error));
 }
 
@@ -129,43 +171,53 @@ function loadMatchsPasses() {
 // Charger automatiquement les matchs passés au chargement de la page
 document.addEventListener('DOMContentLoaded', loadMatchsPasses);
 
-// Fonction pour ouvrir la modale de pari
-function openBetModal(matchId, equipeChoisie) {
+let userPoints = 0;
+
+function openBetModal(matchId, equipeChoisie, pointsDisponibles) {
+    userPoints = pointsDisponibles; // Stocker les points disponibles de l'utilisateur
     document.getElementById('betModal').classList.remove('hidden');
     document.getElementById('modalMatchId').value = matchId;
     document.getElementById('modalEquipeChoisie').value = equipeChoisie;
     document.getElementById('modalMatchTitle').textContent = `Parier sur ${equipeChoisie}`;
+    document.getElementById('errorBet').textContent = ''; // Réinitialiser le message d'erreur
 }
+
+document.querySelector('#betModal form').addEventListener('submit', function (event) {
+    const pointsMises = parseInt(document.getElementById('pointsMises').value, 10);
+    const errorBet = document.getElementById('errorBet');
+
+    errorBet.textContent = ''; // Réinitialiser le message d'erreur
+    errorBet.style.color = 'red';
+
+    if (isNaN(pointsMises) || pointsMises <= 0) {
+        event.preventDefault();
+        errorBet.textContent = "Veuillez entrer un nombre valide de points.";
+    } else if (pointsMises > userPoints) {
+        event.preventDefault();
+        errorBet.textContent = "Vous ne pouvez pas parier plus de points que vous n'en possédez.";
+    }
+});
 
 // Fonction pour fermer la modale de pari
 function closeBetModal() {
     document.getElementById('betModal').classList.add('hidden');
 }
 
-// Vérification de la date et de l'heure du match
-document.querySelector('form').addEventListener('submit', function (event) {
-    const dateInput = document.getElementById('date').value;
-    const selectedDate = new Date(dateInput);
-    const currentDate = new Date();
-    const errorElement = document.getElementById('dateError');
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('profileForm');
+    const passwordError = document.getElementById('passwordError');
 
-    errorElement.classList.add('hidden');
+    form.addEventListener('submit', function (event) {
+        const newPassword = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
 
-    if (selectedDate < currentDate) {
-        event.preventDefault();
-        errorElement.classList.remove('hidden');
-    }
+        // Réinitialiser le message d'erreur
+        passwordError.textContent = '';
+        passwordError.style.color = 'red'; // Style en rouge
+
+        if (newPassword !== confirmPassword) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+            passwordError.textContent = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
+        }
+    });
 });
-
-// Appel initial pour pré-remplir les sélections
-window.onload = () => {
-    if (document.getElementById("jeuId")) {
-        document.getElementById("jeuId").value = matchJeuId;
-        filtrerCompetitions();
-        document.getElementById("competitionId").value = matchCompetitionId;
-        filtrerEquipes().then(() => {
-            document.getElementById("equipe1Id").value = equipe1Id;
-            document.getElementById("equipe2Id").value = equipe2Id;
-        });
-    }
-}

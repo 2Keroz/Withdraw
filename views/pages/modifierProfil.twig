@@ -1,119 +1,60 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link rel="stylesheet" href="/css/styles.css">
+{% endblock %}
+
 {% block main %}
-<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="px-6 py-8">
-            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Modifier mon profil</h1>
-            <form action="/profil/modifier" method="POST" class="space-y-4">
+    <div>
+        <div>
+            <h1>Modifier mon profil</h1>
+            <form action="/profil/modifier" method="POST" id="profileForm">
                 <div>
-                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required>
                 </div>
 
                 <div>
-                    <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required>
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required>
                 </div>
 
                 <div>
-                    <label for="date_naissance" class="block text-sm font-medium text-gray-700">Date de Naissance</label>
-                    <input type="date" id="date_naissance" name="date_naissance" value="{{ utilisateur.date_naissance|date('Y-m-d') }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="date_naissance">Date de Naissance</label>
+                    <input type="date" id="date_naissance" name="date_naissance" value="{{ utilisateur.date_naissance|date('Y-m-d') }}" required>
                 </div>
 
                 <div>
-                    <label for="current_password" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
-                    <input type="password" id="current_password" name="current_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="current_password">Mot de passe actuel</label>
+                    <input type="password" id="current_password" name="current_password">
                 </div>
 
                 <div>
-                    <label for="new_password" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="new_password">Nouveau mot de passe</label>
+                    <input type="password" id="new_password" name="new_password">
                 </div>
 
                 <div>
-                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
-                    <input type="password" id="confirm_password" name="confirm_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label for="confirm_password">Confirmer le nouveau mot de passe</label>
+                    <input type="password" id="confirm_password" name="confirm_password">
                 </div>
 
-                <div class="mt-6">
-                    <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">
-                        Sauvegarder les modifications
-                    </button>
+                <div>
+                <p id="passwordError"></p>
+                </div>
+
+                <div>
+                    <button type="submit">Sauvegarder les modifications</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
-{% endblock %}{% extends "../layouts/base.twig" %}
-
-{% block main %}
-<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="px-6 py-8">
-            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Modifier mon profil</h1>
-            <form action="/profil/modifier" method="POST" class="space-y-4">
-                <div>
-                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="date_naissance" class="block text-sm font-medium text-gray-700">Date de Naissance</label>
-                    <input type="date" id="date_naissance" name="date_naissance" value="{{ utilisateur.date_naissance|date('Y-m-d') }}" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="current_password" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
-                    <input type="password" id="current_password" name="current_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="new_password" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div>
-                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
-                    <input type="password" id="confirm_password" name="confirm_password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
-                </div>
-
-                <div class="mt-6">
-                    <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">
-                        Sauvegarder les modifications
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+{% endblock %}
+{% block script %}
+<script src="/js/script.js"></script>
 {% endblock %}

@@ -3,7 +3,7 @@ model Competition {
     nom         String
     description String
     jeuId       Int      // Clé étrangère pour le jeu
-    jeu         Jeu      @relation(fields: [jeuId], references: [id])
+    jeu         Jeu      @relation(fields: [jeuId], references: [id], onDelete: Cascade)
     equipes     Equipe[] // Relation avec les équipes
     matchs      Match[]  // Relation avec les matchs
 }

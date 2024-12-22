@@ -1,141 +1,79 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link rel="stylesheet" href="/css/styles.css">
+{% endblock %}
+
 {% block main %}
-	<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-		<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
-			<h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Créer un Match</h1>
-			<form
-				action="/admin/match/creer" method="POST">
-				<!-- Sélection du jeu -->
-				<div class="mb-4">
-					<label for="jeuId" class="block text-sm font-medium text-gray-700">Jeu</label>
-					<select name="jeuId" id="jeuId" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required onchange="filtrerCompetitions()">
-						<option value="">-- Sélectionnez un jeu --</option>
-						{% for jeu in jeux %}
-							<option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-						{% endfor %}
-					</select>
-				</div>
+    <div>
+        <div>
+            <h1>Créer un Match</h1>
+            <form action="/admin/match/creer" method="POST">
+                <!-- Sélection du jeu -->
+                <div>
+                    <label for="jeuId">Jeu</label>
+                    <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
+                        <option value="">-- Sélectionnez un jeu --</option>
+                        {% for jeu in jeux %}
+                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-				<!-- Sélection de la compétition -->
-				<div class="mb-4">
-					<label for="competitionId" class="block text-sm font-medium text-gray-700">Compétition</label>
-					<select name="competitionId" id="competitionId" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required onchange="filtrerEquipes()">
-						<option value="">-- Sélectionnez une compétition --</option>
-						{% for jeuId, competitions in competitionsByJeu %}
-							<optgroup label="Jeu ID: {{ jeuId }}">
-								{% for competition in competitions %}
-									<option value="{{ competition.id }}">{{ competition.nom }}</option>
-								{% endfor %}
-							</optgroup>
-						{% endfor %}
-					</select>
-				</div>
+                <!-- Sélection de la compétition -->
+                <div>
+                    <label for="competitionId">Compétition</label>
+                    <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()">
+                        <option value="">-- Sélectionnez une compétition --</option>
+                        {% for jeuId, competitions in competitionsByJeu %}
+                            <optgroup label="Jeu ID: {{ jeuId }}">
+                                {% for competition in competitions %}
+                                    <option value="{{ competition.id }}">{{ competition.nom }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
 
-				<!-- Sélection des équipes -->
-				<div class="mb-4">
-					<label for="equipe1Id" class="block text-sm font-medium text-gray-700">Équipe 1</label>
-					<select name="equipe1Id" id="equipe1Id" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
-						<option value="">-- Sélectionnez l'équipe 1 --</option>
-					</select>
-				</div>
+                <!-- Sélection des équipes -->
+                <div>
+                    <label for="equipe1Id">Équipe 1</label>
+                    <select name="equipe1Id" id="equipe1Id" required>
+                        <option value="">-- Sélectionnez l'équipe 1 --</option>
+                    </select>
+                </div>
 
-				<div class="mb-4">
-					<label for="equipe2Id" class="block text-sm font-medium text-gray-700">Équipe 2</label>
-					<select name="equipe2Id" id="equipe2Id" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
-						<option value="">-- Sélectionnez l'équipe 2 --</option>
-					</select>
-				</div>
+                <div>
+                    <label for="equipe2Id">Équipe 2</label>
+                    <select name="equipe2Id" id="equipe2Id" required>
+                        <option value="">-- Sélectionnez l'équipe 2 --</option>
+                    </select>
+                </div>
 
-				<!-- Champ pour la date et l'heure -->
-				<div class="mb-4">
-					<label for="date" class="block text-sm font-medium text-gray-700">Date et Heure</label>
-					<input type="datetime-local" name="date" id="date" class="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-4" required>
-					<p id="dateError" class="text-red-500 text-sm mt-2 hidden">La date et l'heure sélectionnées doivent être supérieures à la date actuelle.</p>
-				</div>
+                <!-- Champ pour la date et l'heure -->
+                <div>
+                    <label for="date">Date et Heure</label>
+                    <input type="datetime-local" name="date" id="date" required>
+                    <p id="dateError"></p>
+                </div>
 
-				<div class="text-center">
-					<button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Créer le Match</button>
-				</div>
-			</form>
-		</div>
-	</div>
-
-	<!-- Script JavaScript pour filtrer les compétitions et équipes -->
-	<script>
-		const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
-
-async function getEquipes(competitionId) {
-const response = await fetch (`/admin/equipes/${competitionId}`);
-
-if (! response.ok) {
-console.error("Erreur lors de la récupération des équipes :", response.statusText);
-return [];
-}
-
-const data = await response.json();
-console.log("Équipes reçues :", data); // Ajoutez cette ligne pour vérifier les données
-return data;
-}
-
-async function filtrerEquipes() {
-const competitionId = document.getElementById("competitionId").value;
-const equipe1Select = document.getElementById("equipe1Id");
-const equipe2Select = document.getElementById("equipe2Id");
-
-equipe1Select.innerHTML = '<option value="">-- Sélectionnez l\'équipe 1 --</option>';
-equipe2Select.innerHTML = '<option value="">-- Sélectionnez l\'équipe 2 --</option>';
-
-if (competitionId) {
-const equipes = await getEquipes(competitionId);
-if (equipes.length === 0) {
-console.warn("Aucune équipe trouvée pour la compétition sélectionnée.");
-}
-equipes.forEach(equipe => {
-const option1 = document.createElement('option');
-option1.value = equipe.id;
-option1.textContent = equipe.nom;
-equipe1Select.appendChild(option1);
-
-const option2 = document.createElement('option');
-option2.value = equipe.id;
-option2.textContent = equipe.nom;
-equipe2Select.appendChild(option2);
-});
-}
-}
+                <div>
+                    <button type="submit">Créer le Match</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
-function filtrerCompetitions() {
-const jeuId = document.getElementById("jeuId").value;
-const competitionSelect = document.getElementById("competitionId");
+{% endblock %}
+{% block script %}
+    <script src="/js/script.js"></script>
+    <script>
+    const competitionsByJeu = {{ competitionsByJeu|json_encode|raw }};
+    const matchJeuId = {{ matchJeuId|default('null') }};
+    const matchCompetitionId = {{ matchCompetitionId|default('null') }};
+    const equipe1Id = {{ equipe1Id|default('null') }};
+    const equipe2Id = {{ equipe2Id|default('null') }};
+</script>
 
-competitionSelect.innerHTML = '<option value="">-- Sélectionnez une compétition --</option>';
-
-if (competitionsByJeu[jeuId]) {
-competitionsByJeu[jeuId].forEach(competition => {
-const option = document.createElement('option');
-option.value = competition.id;
-option.textContent = competition.nom;
-competitionSelect.appendChild(option);
-});
-}
-filtrerEquipes(); // Reset équipes à chaque changement de compétition
-}
-
-document.querySelector('form').addEventListener('submit', function (event) {
-const dateInput = document.getElementById('date').value;
-const selectedDate = new Date(dateInput);
-const currentDate = new Date();
-const errorElement = document.getElementById('dateError');
-
-// Réinitialiser l'affichage du message d'erreur
-errorElement.classList.add('hidden');
-
-if (selectedDate < currentDate) {
-event.preventDefault(); // Empêche l'envoi du formulaire
-errorElement.classList.remove('hidden'); // Affiche le message d'erreur
-}
-});
-	</script>
 {% endblock %}
