@@ -171,23 +171,14 @@ function loadMatchsPasses() {
 // Charger automatiquement les matchs passés au chargement de la page
 document.addEventListener('DOMContentLoaded', loadMatchsPasses);
 
-let userPoints = 0;
-
-function openBetModal(matchId, equipeChoisie, pointsDisponibles) {
-    userPoints = pointsDisponibles; // Stocker les points disponibles de l'utilisateur
-    document.getElementById('betModal').classList.remove('hidden');
-    document.getElementById('modalMatchId').value = matchId;
-    document.getElementById('modalEquipeChoisie').value = equipeChoisie;
-    document.getElementById('modalMatchTitle').textContent = `Parier sur ${equipeChoisie}`;
-    document.getElementById('errorBet').textContent = ''; // Réinitialiser le message d'erreur
-}
-
 document.querySelector('#betModal form').addEventListener('submit', function (event) {
     const pointsMises = parseInt(document.getElementById('pointsMises').value, 10);
     const errorBet = document.getElementById('errorBet');
 
     errorBet.textContent = ''; // Réinitialiser le message d'erreur
     errorBet.style.color = 'red';
+
+    console.log("Points disponibles : ", userPoints);  // Vérification de la valeur des points
 
     if (isNaN(pointsMises) || pointsMises <= 0) {
         event.preventDefault();
@@ -198,10 +189,35 @@ document.querySelector('#betModal form').addEventListener('submit', function (ev
     }
 });
 
-// Fonction pour fermer la modale de pari
-function closeBetModal() {
-    document.getElementById('betModal').classList.add('hidden');
+// Fonction pour ouvrir la modale
+function openBetModal(matchId, equipeChoisie, pointsDisponibles) {
+    const betModal = document.getElementById('betModal');
+    const modalMatchTitle = document.getElementById('modalMatchTitle');
+    const modalMatchId = document.getElementById('modalMatchId');
+    const modalEquipeChoisie = document.getElementById('modalEquipeChoisie');
+    const errorBet = document.getElementById('errorBet');
+
+    // Configurez les champs de la modale
+    modalMatchTitle.textContent = `Parier sur ${equipeChoisie}`;
+    modalMatchId.value = matchId;
+    modalEquipeChoisie.value = equipeChoisie;
+
+    // Réinitialisez les erreurs et le champ d'entrée
+    errorBet.textContent = '';
+    document.getElementById('pointsMises').value = '';
+
+    // Affichez la modale
+    betModal.style.display = 'flex';
 }
+
+// Fonction pour fermer la modale
+function closeBetModal() {
+    const betModal = document.getElementById('betModal');
+    betModal.style.display = 'none';
+}
+
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('profileForm');
@@ -211,12 +227,32 @@ document.addEventListener('DOMContentLoaded', function () {
         const newPassword = document.getElementById('new_password').value;
         const confirmPassword = document.getElementById('confirm_password').value;
 
-        // Réinitialiser le message d'erreur
         passwordError.textContent = '';
-        passwordError.style.color = 'red'; // Style en rouge
+        passwordError.style.color = 'red';
 
         if (newPassword !== confirmPassword) {
-            event.preventDefault(); // Empêche la soumission du formulaire
+            event.preventDefault();
+            passwordError.textContent = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('registerForm');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const passwordError = document.getElementById('passwordError');
+
+    form.addEventListener('submit', function (event) {
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        passwordError.style.display = 'none';
+        passwordError.textContent = '';
+
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            passwordError.style.display = 'block';
             passwordError.textContent = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
         }
     });

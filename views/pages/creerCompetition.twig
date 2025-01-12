@@ -1,31 +1,35 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/creerCompetition.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <h1>Créer une Compétition</h1>
-            <form action="/admin/competition/creer" method="POST">
-                <div>
-                    <label for="nom">Nom de la compétition</label>
-                    <input type="text" name="nom" id="nom" required>
-                </div>
-                <div>
-                    <label for="description">Description de la compétition</label>
-                    <input type="text" name="description" id="description" required>
-                </div>
-                <div>
-                    <label for="jeuId">Jeu associé</label>
-                    <select name="jeuId" id="jeuId" required>
-                        <option value="">Sélectionnez un jeu</option>
-                        {% for jeu in jeux %}
-                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <button type="submit">Créer Compétition</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<main>
+    <section class="form-section">
+        <h1>Créer une Compétition</h1>
+        <form action="/admin/competition/creer" method="POST" class="responsive-form">
+            <div class="form-group">
+                <label for="nom">Nom de la compétition</label>
+                <input type="text" name="nom" id="nom" placeholder="Nom de la compétition" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description de la compétition</label>
+                <input type="text" name="description" id="description" placeholder="Description" required>
+            </div>
+            <div class="form-group">
+                <label for="jeuId">Jeu associé</label>
+                <select name="jeuId" id="jeuId" required>
+                    <option value="">Sélectionnez un jeu</option>
+                    {% for jeu in jeux %}
+                        <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="button">Créer Compétition</button>
+            </div>
+        </form>
+    </section>
+</main>
 {% endblock %}

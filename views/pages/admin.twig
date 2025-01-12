@@ -1,184 +1,99 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/admin.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-	<style>
-		.match-started {
-			background-color: #f0f8ff; /* Couleur de fond pour les matchs commencés */
-		}
-	</style>
-	<div>
-		<div>
-			<div>
-				<!-- Bouton pour créer un jeu -->
-				<div>
-					<a href="/admin/jeu/creer">Créer un Jeu</a>
-				</div>
+<main>
+    <div id="left-column">
+        <h2>Gestion</h2>
+        <article class="create-view-buttons">
+            <h3>Créer</h3>
+            <a href="/admin/jeu/creer" class="button">Créer un Jeu</a>
+            <a href="/admin/competition/creer" class="button">Créer une Compétition</a>
+            <a href="/admin/equipe/creer" class="button">Créer une Équipe</a>
+            <a href="/admin/match/creer" class="button">Créer un Match</a>
+        </article>
+        <article class="create-view-buttons">
+            <h3>Voir</h3>
+            <a href="/admin/jeux" class="button">Voir tous les Jeux</a>
+            <a href="/admin/competitions" class="button">Voir toutes les Compétitions</a>
+            <a href="/admin/equipes" class="button">Voir toutes les Équipes</a>
+        </article>
+    </div>
 
-				<!-- Bouton pour créer une compétition -->
-				<div>
-					<a href="/admin/competition/creer">Créer une Compétition</a>
-				</div>
-
-				<!-- Bouton pour créer une équipe -->
-				<div>
-					<a href="/admin/equipe/creer">Créer une Équipe</a>
-				</div>
-
-				<!-- Bouton pour créer un match -->
-				<div>
-					<a href="/admin/match/creer">Créer un Match</a>
-				</div>
-
-				<!-- Bouton pour voir tous les jeux -->
-				<div>
-					<a href="/admin/jeux">Voir tous les Jeux</a>
-				</div>
-
-				<!-- Bouton pour voir toutes les compétitions -->
-				<div>
-					<a href="/admin/competitions">Voir toutes les Compétitions</a>
-				</div>
-
-				<!-- Bouton pour voir toutes les équipes -->
-				<div>
-					<a href="/admin/equipes">Voir toutes les Équipes</a>
-				</div>
-
-				<!-- Section des utilisateurs -->
-				<div>
-					<div>
-						<h1>Gestion des utilisateurs</h1>
-						<form action="/admin/utilisateurs/recherche" method="GET">
-							<div>
-								<input type="text" name="query" placeholder="Rechercher par nom, prénom ou email" required>
-								<button type="submit">Rechercher</button>
-							</div>
-						</form>
-
-						<div>
-							<table>
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Nom</th>
-										<th>Prénom</th>
-										<th>Email</th>
-										<th>Points</th>
-										<th>Rôle</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for utilisateur in utilisateurs %}
-										<tr>
-											<td>{{ utilisateur.id }}</td>
-											<td>{{ utilisateur.nom }}</td>
-											<td>{{ utilisateur.prenom }}</td>
-											<td>{{ utilisateur.email }}</td>
-											<td>{{ utilisateur.points }}</td>
-											<td>{{ utilisateur.role }}</td>
-											<td>
-												<a href="/admin/utilisateur/{{ utilisateur.id }}/modifier">Modifier</a>
-												<form action="/admin/utilisateur/{{ utilisateur.id }}/supprimer" method="POST">
-													<button type="submit">Supprimer</button>
-												</form>
-											</td>
-										</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!-- Section des matchs non clôturés -->
-				<div>
-					<div>
-						<h1>Gestion des matchs non clôturés</h1>
-
-						<form action="/admin/matchs/non-clotures/recherche" method="GET">
-							<div>
-								<input type="text" name="query" placeholder="Rechercher par équipe" required>
-								<button type="submit">Rechercher</button>
-							</div>
-						</form>
-						<div>
-							<table>
-								<thead>
-									<tr>
-										<th>Match ID</th>
-										<th>Équipe 1</th>
-										<th>Équipe 2</th>
-										<th>Date</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for match in matchsNonClotures %}
-									<tr class="{% if match.date|date('U') <= 'now'|date('U') %}match-started{% endif %}">
-										<td>{{ match.id }}</td>
-										<td>{{ match.equipe1.nom }}</td>
-										<td>{{ match.equipe2.nom }}</td>
-										<td>{{ match.date|date("d/m/Y H:i") }}</td>
-										<td>
-											<a href="/admin/match/{{ match.id }}/modifier">Modifier</a>
-											<a href="/admin/match/{{ match.id }}/supprimer">Supprimer</a>
-											{% if match.date|date('U') <= 'now'|date('U') %}
-												<a href="/admin/match/{{ match.id }}/cloturer">Clôturer</a>
-											{% endif %}
-										</td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!-- Section des matchs clôturés -->
-				<div>
-					<div>
-						<h1>Gestion des matchs clôturés</h1>
-
-						<form action="/admin/matchs/clotures/recherche" method="GET">
-							<div>
-								<input type="text" name="query" placeholder="Rechercher par équipe" required>
-								<button type="submit">Rechercher</button>
-							</div>
-						</form>
-						<div>
-							<table>
-								<thead>
-									<tr>
-										<th>Match ID</th>
-										<th>Équipe 1</th>
-										<th>Équipe 2</th>
-										<th>Date</th>
-										<th>Équipe Gagnante</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for match in matchsClotures %}
-										<tr>
-											<td>{{ match.id }}</td>
-											<td>{{ match.equipe1.nom }}</td>
-											<td>{{ match.equipe2.nom }}</td>
-											<td>{{ match.date|date("d/m/Y H:i") }}</td>
-											<td>{{ match.equipeGagnante.nom }}</td>
-											<td>
-												<form action="/admin/match/{{ match.id }}/supprimer" method="POST">
-													<button type="submit">Supprimer</button>
-												</form>
-											</td>
-										</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div id="right-column">
+        <section>
+            <h1>Gestion des utilisateurs</h1>
+            <form action="/admin/utilisateurs/recherche" method="GET">
+                <input type="text" name="query" placeholder="Rechercher par nom, prénom ou email" required>
+                <button type="submit" class="button">Rechercher</button>
+            </form>
+            <div class="user-cards">
+                {% for utilisateur in utilisateurs %}
+                <div class="user-card">
+                    <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
+                    <p><strong>Email:</strong> {{ utilisateur.email }}</p>
+                    <p><strong>Points:</strong> {{ utilisateur.points }}</p>
+                    <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+                    <div class="actions">
+                        <a href="/admin/utilisateur/{{ utilisateur.id }}/modifier" class="button">Modifier</a>
+                        <form action="/admin/utilisateur/{{ utilisateur.id }}/supprimer" method="POST">
+                            <button type="submit" class="button">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h1>Gestion des matchs non clôturés</h1>
+            <form action="/admin/matchs/non-clotures/recherche" method="GET">
+                <input type="text" name="query" placeholder="Rechercher par équipe" required>
+                <button type="submit" class="button">Rechercher</button>
+            </form>
+            <div class="match-cards">
+                {% for match in matchsNonClotures %}
+                <div class="match-card {% if match.date|date('U') <= 'now'|date('U') %}match-started{% endif %}">
+                    <h2>Match #{{ match.id }}</h2>
+                    <p><strong>Équipe 1:</strong> {{ match.equipe1.nom }}</p>
+                    <p><strong>Équipe 2:</strong> {{ match.equipe2.nom }}</p>
+                    <p><strong>Date:</strong> {{ match.date|date("d/m/Y H:i") }}</p>
+                    <div class="actions">
+                        <a href="/admin/match/{{ match.id }}/modifier" class="button">Modifier</a>
+                        <a href="/admin/match/{{ match.id }}/supprimer" class="button">Supprimer</a>
+                        {% if match.date|date('U') <= 'now'|date('U') %}
+                        <a href="/admin/match/{{ match.id }}/cloturer" class="button">Clôturer</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h1>Gestion des matchs clôturés</h1>
+            <form action="/admin/matchs/clotures/recherche" method="GET">
+                <input type="text" name="query" placeholder="Rechercher par équipe" required>
+                <button type="submit" class="button">Rechercher</button>
+            </form>
+            <div class="match-cards">
+                {% for match in matchsClotures %}
+                <div class="match-card">
+                    <h2>Match #{{ match.id }}</h2>
+                    <p><strong>Équipe 1:</strong> {{ match.equipe1.nom }}</p>
+                    <p><strong>Équipe 2:</strong> {{ match.equipe2.nom }}</p>
+                    <p><strong>Date:</strong> {{ match.date|date("d/m/Y H:i") }}</p>
+                    <p><strong>Équipe Gagnante:</strong> {{ match.equipeGagnante.nom }}</p>
+                    <div class="actions">
+                        <form action="/admin/match/{{ match.id }}/supprimer" method="POST">
+                            <button type="submit" class="button">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</main>
 {% endblock %}

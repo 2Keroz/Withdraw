@@ -1,22 +1,28 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/profil.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
+<main>
+    <section>
             <h1>Mon Profil</h1>
-            <div>
-                <p><span>Nom :</span> {{ utilisateur.nom }}</p>
-                <p><span>Prénom :</span> {{ utilisateur.prenom }}</p>
-                <p><span>Email :</span> {{ utilisateur.email }}</p>
-                <p><span>Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
-                <p><span>Mes points :</span> <span>{{ utilisateur.points }}</span></p>
-            </div>
-            <div>
-                <a href="/modifierProfil">Modifier profil</a>
-                <form action="/profil/supprimer" method="POST">
-                    <button type="submit">Supprimer mon compte</button>
-                </form>
-            </div>
-        </div>
-    </div>
+
+        <article>
+            <p><span>Nom :</span> {{ utilisateur.nom }}</p>
+            <p><span>Prénom :</span> {{ utilisateur.prenom }}</p>
+            <p><span>Email :</span> {{ utilisateur.email }}</p>
+            <p><span>Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
+            <p><span>Mes points :</span> <span>{{ utilisateur.points }}</span></p>
+        </article>
+
+        <footer>
+            <a href="/modifierProfil">Modifier profil</a>
+            <form action="/profil/supprimer" method="POST">
+                <button type="submit">Supprimer mon compte</button>
+            </form>
+        </footer>
+    </section>
+</main>
 {% endblock %}

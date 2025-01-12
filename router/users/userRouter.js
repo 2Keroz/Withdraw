@@ -145,7 +145,6 @@ userRouter.post('/parier', authguard, async (req, res) => {
             return res.redirect('/home');
         }
 
-        // Créer le pari
         await prisma.paris.create({
             data: {
                 utilisateur: utilisateurId,
@@ -163,7 +162,6 @@ userRouter.post('/parier', authguard, async (req, res) => {
             },
         });
 
-        // Mettre à jour les points de l'utilisateur
         await prisma.utilisateur.update({
             where: { id: utilisateurId },
             data: { points: utilisateur.points - points_mises },
@@ -180,14 +178,13 @@ userRouter.get('/mes-paris', authguard, async (req, res) => {
     try {
         const utilisateurId = req.session.utilisateur.id;
 
-        // Récupérer les paris de l'utilisateur
         const paris = await prisma.paris.findMany({
             where: { utilisateur_id: utilisateurId },
             include: {
-                utilisateur: true, // Si vous souhaitez inclure les pertes liées aux paris
+                utilisateur: true,
             },
             orderBy: {
-                date_pari: 'desc', // Tri des paris du plus récent au plus ancien
+                date_pari: 'desc',
             },
         });
 

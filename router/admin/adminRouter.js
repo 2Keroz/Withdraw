@@ -30,7 +30,7 @@ adminRouter.get('/admin', authguard, async (req, res) => {
                             nom: true
                         }
                     },
-                    equipeGagnante: {  // Relation via equipeGagnanteId
+                    equipeGagnante: {
                         select: {
                             nom: true
                         }
@@ -44,10 +44,9 @@ adminRouter.get('/admin', authguard, async (req, res) => {
             const matchsClotures = matchs.filter(match => match.cloture);
             const matchsNonClotures = matchs.filter(match => !match.cloture);
 
-            // Assurez-vous de gérer les cas où equipeGagnante est null
             matchsClotures.forEach(match => {
                 if (!match.equipeGagnante) {
-                    match.equipeGagnante = { nom: "Aucune équipe gagnante" }; // Valeur par défaut
+                    match.equipeGagnante = { nom: "Aucune équipe gagnante" };
                 }
             });
 
@@ -158,7 +157,7 @@ adminRouter.post('/admin/utilisateur/:id/supprimer', authguard, async (req, res)
 adminRouter.get('/admin/competition/creer', authguard, async (req, res) => {
     try {
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
-            const jeux = await prisma.jeu.findMany(); // Récupère tous les jeux
+            const jeux = await prisma.jeu.findMany();
             return res.render("pages/creerCompetition.twig", { jeux });
         }
         res.redirect("/home");
@@ -231,7 +230,7 @@ adminRouter.post('/admin/competition/creer', authguard, async (req, res) => {
                 data: {
                     nom,
                     description,
-                    jeuId: parseInt(jeuId), // Associer l'ID du jeu sélectionné
+                    jeuId: parseInt(jeuId),
                 },
             });
             res.redirect('/admin');
@@ -256,8 +255,6 @@ adminRouter.get('/admin/equipe/creer', authguard, async (req, res) => {
         const competitions = await prisma.competition.findMany({
             include: { jeu: true },
         });
-
-        // Afficher les compétitions dans la console pour vérification
         console.log("Compétitions récupérées:", competitions);
 
         const competitionsByJeu = competitions.reduce((acc, competition) => {
@@ -300,7 +297,7 @@ adminRouter.post('/admin/equipe/creer', authguard, async (req, res) => {
                 },
             });
 
-            res.redirect('/admin'); // Rediriger vers la page d'administration après la création
+            res.redirect('/admin');
         } else {
             res.redirect("/home");
         }
@@ -321,7 +318,6 @@ adminRouter.get('/admin/equipe/creer', authguard, async (req, res) => {
             include: { jeu: true },
         });
 
-        // Regrouper les compétitions par jeu
         const competitionsByJeu = competitions.reduce((acc, competition) => {
             if (!acc[competition.jeuId]) {
                 acc[competition.jeuId] = [];
@@ -392,7 +388,7 @@ adminRouter.post('/admin/equipe/creer', authguard, async (req, res) => {
                     competition: { connect: { id: parseInt(competitionId) } },
                 },
             });
-            res.redirect('/admin'); // Rediriger vers la page d'administration après la création
+            res.redirect('/admin');
         } else {
             res.redirect("/home");
         }
@@ -459,12 +455,10 @@ adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
     try {
         const { equipe1Id, equipe2Id, competitionId, jeuId, date } = req.body;
 
-        // Vérifiez que tous les champs sont fournis
         if (!equipe1Id || !equipe2Id || !competitionId || !jeuId || !date) {
             return res.status(400).send("Tous les champs sont requis.");
         }
 
-        // Vérifier si les équipes existent
         const equipe1 = await prisma.equipe.findUnique({
             where: { id: parseInt(equipe1Id) },
         });
@@ -473,12 +467,10 @@ adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
             where: { id: parseInt(equipe2Id) },
         });
 
-        // Vérifier si la compétition existe
         const competition = await prisma.competition.findUnique({
             where: { id: parseInt(competitionId) },
         });
 
-        // Vérifier si le jeu existe
         const jeu = await prisma.jeu.findUnique({
             where: { id: parseInt(jeuId) },
         });
@@ -490,11 +482,11 @@ adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
         // Créer le match
         await prisma.match.create({
             data: {
-                equipe1Id: parseInt(equipe1Id),  // ID de l'équipe 1
-                equipe2Id: parseInt(equipe2Id),  // ID de l'équipe 2
+                equipe1Id: parseInt(equipe1Id),
+                equipe2Id: parseInt(equipe2Id),
                 date: new Date(date),
-                competitionId: parseInt(competitionId), // ID de la compétition
-                jeuId: parseInt(jeuId)  // ID du jeu
+                competitionId: parseInt(competitionId),
+                jeuId: parseInt(jeuId)
             },
         });
 
@@ -509,12 +501,10 @@ adminRouter.get('/admin/match/:id/supprimer', authguard, async (req, res) => {
     try {
         const { id } = req.params;
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
-            // Récupérer les paris associés au match
             const paris = await prisma.paris.findMany({
                 where: { matchId: parseInt(id) }
             });
 
-            // Mettre à jour les points des utilisateurs
             for (const pari of paris) {
                 await prisma.utilisateur.update({
                     where: { id: pari.utilisateur_id },
@@ -522,12 +512,10 @@ adminRouter.get('/admin/match/:id/supprimer', authguard, async (req, res) => {
                 });
             }
 
-            // Supprimer les paris associés au match
             await prisma.paris.deleteMany({
                 where: { matchId: parseInt(id) }
             });
 
-            // Supprimer le match
             await prisma.match.delete({
                 where: { id: parseInt(id) }
             });
@@ -551,14 +539,13 @@ adminRouter.get('/admin/match/:id/modifier', authguard, async (req, res) => {
             const match = await prisma.match.findUnique({
                 where: { id: parseInt(id) },
                 include: {
-                    jeu: true, // Incluez le jeu
-                    competition: true, // Incluez la compétition
+                    jeu: true,
+                    competition: true,
                 }
             });
-            const jeux = await prisma.jeu.findMany(); // Récupérez tous les jeux
-            const competitionsByJeu = {}; // Structure pour les compétitions par jeu
+            const jeux = await prisma.jeu.findMany();
+            const competitionsByJeu = {};
 
-            // Remplir competitionsByJeu
             const competitions = await prisma.competition.findMany();
             competitions.forEach(comp => {
                 if (!competitionsByJeu[comp.jeuId]) {
@@ -593,7 +580,7 @@ adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
                 competitionId: parseInt(competitionId),
                 equipe1Id: parseInt(equipe1Id),
                 equipe2Id: parseInt(equipe2Id),
-                date: new Date(date), // Assurez-vous que la date est au format Date
+                date: new Date(date),
             },
         });
 
@@ -639,7 +626,6 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
     const { equipeGagnanteId } = req.body;
 
     try {
-        // Vérifier si le match existe
         const match = await prisma.match.findUnique({
             where: { id: parseInt(matchId) }
         });
@@ -652,7 +638,6 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
             return res.status(400).json({ error: "Le match est déjà clôturé" });
         }
 
-        // Vérifier si l'équipe gagnante existe
         const equipeGagnante = await prisma.equipe.findUnique({
             where: { id: parseInt(equipeGagnanteId) }
         });
@@ -661,25 +646,21 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
             return res.status(404).json({ error: "Équipe gagnante non trouvée" });
         }
 
-        // Mettre à jour les paris en fonction de l'équipe gagnante
         const paris = await prisma.paris.findMany({
             where: { matchId: parseInt(matchId) }
         });
 
         for (const pari of paris) {
             if (pari.equipe_choisie === equipeGagnante.nom) {
-                // Mise à jour des points pour les paris gagnants
                 await prisma.utilisateur.update({
                     where: { id: pari.utilisateur_id },
                     data: { points: { increment: pari.points_mises * 2 } }
                 });
-                // Mettre à jour le statut du pari
                 await prisma.paris.update({
                     where: { id: pari.id },
                     data: { status: 'GAGNE' }
                 });
             } else {
-                // Mettre à jour le statut du pari
                 await prisma.paris.update({
                     where: { id: pari.id },
                     data: { status: 'PERDU' }
@@ -687,7 +668,6 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
             }
         }
 
-        // Marquer le match comme clôturé
         await prisma.match.update({
             where: { id: parseInt(matchId) },
             data: { equipeGagnanteId: parseInt(equipeGagnanteId), cloture: true }
@@ -700,17 +680,15 @@ adminRouter.post('/admin/match/:matchId/cloturer', authguard, async (req, res) =
     }
 });
 
-
+/////////////////////////////////////////////////////////////// ROUTE POUR SUPP UN MATCH /////////////////////////////////////////////////
 adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
     try {
         const { id } = req.params;
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
-            // Supprimer les paris associés au match
             await prisma.paris.deleteMany({
                 where: { matchId: parseInt(id) }
             });
 
-            // Supprimer le match
             await prisma.match.delete({
                 where: { id: parseInt(id) }
             });

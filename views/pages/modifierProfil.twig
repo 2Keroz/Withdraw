@@ -1,60 +1,72 @@
 {% extends "../layouts/base.twig" %}
 
 {% block style %}
-<link rel="stylesheet" href="/css/styles.css">
+	<link href="/css/modifierProfil.css" rel="stylesheet">
 {% endblock %}
 
 {% block main %}
-    <div>
-        <div>
-            <h1>Modifier mon profil</h1>
-            <form action="/profil/modifier" method="POST" id="profileForm">
-                <div>
-                    <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required>
-                </div>
+	<main>
+		<section>
+			<h1>Modifier mon profil</h1>
 
-                <div>
-                    <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required>
-                </div>
+			<article>
+				<form action="/profil/modifier" method="POST" id="profileForm">
+					<fieldset>
+						<div>
+							<label for="nom">Nom</label>
+							<input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required>
+						</div>
 
-                <div>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required>
-                </div>
+						<div>
+							<label for="prenom">Prénom</label>
+							<input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required>
+						</div>
 
-                <div>
-                    <label for="date_naissance">Date de Naissance</label>
-                    <input type="date" id="date_naissance" name="date_naissance" value="{{ utilisateur.date_naissance|date('Y-m-d') }}" required>
-                </div>
+						<div>
+							<label for="email">Email</label>
+							<input type="email" id="email" name="email" value="{{ utilisateur.email }}" required>
+						</div>
 
-                <div>
-                    <label for="current_password">Mot de passe actuel</label>
-                    <input type="password" id="current_password" name="current_password">
-                </div>
+						<div>
+							<label for="date_naissance">Date de Naissance</label>
+							<input type="date" id="date_naissance" name="date_naissance" value="{{ utilisateur.date_naissance|date('Y-m-d') }}" required>
+						</div>
 
-                <div>
-                    <label for="new_password">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password">
-                </div>
+						<div>
+							<label for="current_password">Mot de passe actuel</label>
+							<input type="password" id="current_password" name="current_password">
+						</div>
 
-                <div>
-                    <label for="confirm_password">Confirmer le nouveau mot de passe</label>
-                    <input type="password" id="confirm_password" name="confirm_password">
-                </div>
+						<div>
+							<label for="new_password">Nouveau mot de passe</label>
+							<input type="password" id="new_password" name="new_password">
+							{% if errors.confirm %}
+								<span style="color: red;">{{ errors.confirm }}</span>
+							{% endif %}
+						</div>
 
-                <div>
-                <p id="passwordError"></p>
-                </div>
+						<div>
+							<label for="confirm_password">Confirmer le nouveau mot de passe</label>
+							<input type="password" id="confirm_password" name="confirm_password">
+							{% if errors.confirm %}
+								<span style="color: red;">{{ errors.confirm }}</span>
+							{% endif %}
+						</div>
 
-                <div>
-                    <button type="submit">Sauvegarder les modifications</button>
-                </div>
-            </form>
-        </div>
-    </div>
+						<div>
+							<p id="passwordError"></p>
+						</div>
+
+						<div>
+							<button type="submit">Sauvegarder les modifications</button>
+						</div>
+					</fieldset>
+				</form>
+			</article>
+		</section>
+	</main>
 {% endblock %}
+
 {% block script %}
-<script src="/js/script.js"></script>
+	<script src="/js/script.js"></script>
 {% endblock %}

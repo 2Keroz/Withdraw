@@ -1,11 +1,15 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/cloturerMatch.css" rel="stylesheet">
+{% endblock %}
+
+
 {% block main %}
-    <div>
-        <div>
+    <main>
+        <section>
             <h1>Clôturer le Match</h1>
             <form action="/admin/match/{{ match.id }}/cloturer" method="POST">
-                <!-- Sélection de l'équipe gagnante -->
                 <div>
                     <label for="equipeGagnanteId">Équipe gagnante</label>
                     <select name="equipeGagnanteId" id="equipeGagnanteId" required>
@@ -19,6 +23,6 @@
                     <button type="submit">Clôturer le Match</button>
                 </div>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 {% endblock %}

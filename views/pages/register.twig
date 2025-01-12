@@ -1,40 +1,51 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+	<link href="/css/register.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <h1>S'inscrire</h1>
-            <form action="/register" method="POST">
-                <div>
-                    <input autocomplete="nom" id="nom" type="text" name="nom" placeholder="Nom" required>
-                </div>
+	<main>
+		<section>
+			<h1>S'inscrire</h1>
+			<form action="/register" method="POST" id="registerForm">
+				<div>
+					<input id="nom" type="text" name="nom" placeholder="Nom" required>
+				</div>
+				<div>
+					<input id="prenom" type="text" name="prenom" placeholder="Prénom" required>
+				</div>
+				<div>
+					<input id="birth" type="date" name="date" placeholder="Date de naissance" required>
+				</div>
+				<div>
+					<input id="mail" type="email" name="mail" placeholder="Email" required>
+				</div>
+				<div>
+					<input id="password" type="password" name="password" placeholder="Mot de passe" required>
+				</div>
+				<div>
+					<input id="confirm_password" type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required>
+				</div>
+				{% if errors.password %}
+					<div style="color: red;">{{ errors.password }}</div>
+				{% endif %}
+				{% if errors.server %}
+					<div style="color: red;">{{ errors.server }}</div>
+				{% endif %}
+				<div>
+					<input type="submit" value="S'inscrire">
+				</div>
+			</form>
 
-                <div>
-                    <input autocomplete="prenom" id="prenom" type="text" name="prenom" placeholder="Prénom" required>
-                </div>
+			<p>Déjà inscrit ?
+				<a href="/login">Connectez-vous ici</a>
+			</p>
+		</section>
 
-                <div>
-                    <input autocomplete="date" id="birth" type="date" name="date" placeholder="Date de naissance" required>
-                </div>
+	</main>
+{% endblock %}
 
-                <div>
-                    <input autocomplete="mail" id="mail" type="email" name="mail" placeholder="Email" required>
-                </div>
-
-                <div>
-                    <input id="password" type="password" name="password" placeholder="Mot de passe" required>
-                </div>
-
-                <div>
-                    <input id="confirm_password" type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required>
-                </div>
-
-                <div>
-                    <input type="submit" value="S'inscrire">
-                </div>
-            </form>
-
-            <p>Déjà inscrit ? <a href="/login">Connectez-vous ici</a></p>
-        </div>
-    </div>
+{% block script %}
+	<script src="/js/script.js"></script>
 {% endblock %}

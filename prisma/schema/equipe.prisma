@@ -6,8 +6,8 @@ model Equipe {
     jeuId         Int
     competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
     competitionId Int
-    matchsAsEquipe1 Match[]   @relation("Equipe1")  // Relation avec les matchs en tant qu'équipe 1
-    matchsAsEquipe2 Match[]   @relation("Equipe2")  // Relation avec les matchs en tant qu'équipe 2
-    matchsGagnes    Match[]  @relation("EquipeGagnante") // Relation inverse pour equipeGagnante
+    matchsAsEquipe1 Match[]   @relation("Equipe1") 
+    matchsAsEquipe2 Match[]   @relation("Equipe2")  
+    matchsGagnes    Match[]  @relation("EquipeGagnante") 
 
 }

@@ -1,71 +1,67 @@
 {% extends "../layouts/base.twig" %}
 
 {% block style %}
-<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/creerMatch.css">
 {% endblock %}
 
 {% block main %}
-    <div>
-        <div>
-            <h1>Créer un Match</h1>
-            <form action="/admin/match/creer" method="POST">
-                <!-- Sélection du jeu -->
-                <div>
-                    <label for="jeuId">Jeu</label>
-                    <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
-                        <option value="">-- Sélectionnez un jeu --</option>
-                        {% for jeu in jeux %}
-                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+<main>
+    <section class="form-section">
+        <h1>Créer un Match</h1>
+        <form action="/admin/match/creer" method="POST" class="responsive-form">
+            <div class="form-group">
+                <label for="jeuId">Jeu</label>
+                <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()" class="input-field">
+                    <option value="">-- Sélectionnez un jeu --</option>
+                    {% for jeu in jeux %}
+                        <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                <!-- Sélection de la compétition -->
-                <div>
-                    <label for="competitionId">Compétition</label>
-                    <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()">
-                        <option value="">-- Sélectionnez une compétition --</option>
-                        {% for jeuId, competitions in competitionsByJeu %}
-                            <optgroup label="Jeu ID: {{ jeuId }}">
-                                {% for competition in competitions %}
-                                    <option value="{{ competition.id }}">{{ competition.nom }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="competitionId">Compétition</label>
+                <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()" class="input-field">
+                    <option value="">-- Sélectionnez une compétition --</option>
+                    {% for jeuId, competitions in competitionsByJeu %}
+                        <optgroup label="Jeu ID: {{ jeuId }}">
+                            {% for competition in competitions %}
+                                <option value="{{ competition.id }}">{{ competition.nom }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
 
-                <!-- Sélection des équipes -->
-                <div>
-                    <label for="equipe1Id">Équipe 1</label>
-                    <select name="equipe1Id" id="equipe1Id" required>
-                        <option value="">-- Sélectionnez l'équipe 1 --</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="equipe1Id">Équipe 1</label>
+                <select name="equipe1Id" id="equipe1Id" required class="input-field">
+                    <option value="">-- Sélectionnez l'équipe 1 --</option>
+                </select>
+            </div>
 
-                <div>
-                    <label for="equipe2Id">Équipe 2</label>
-                    <select name="equipe2Id" id="equipe2Id" required>
-                        <option value="">-- Sélectionnez l'équipe 2 --</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="equipe2Id">Équipe 2</label>
+                <select name="equipe2Id" id="equipe2Id" required class="input-field">
+                    <option value="">-- Sélectionnez l'équipe 2 --</option>
+                </select>
+            </div>
 
-                <!-- Champ pour la date et l'heure -->
-                <div>
-                    <label for="date">Date et Heure</label>
-                    <input type="datetime-local" name="date" id="date" required>
-                    <p id="dateError"></p>
-                </div>
+            <div class="form-group">
+                <label for="date">Date et Heure</label>
+                <input type="datetime-local" name="date" id="date" required class="input-field">
+                <p id="dateError" class="error-message"></p>
+            </div>
 
-                <div>
-                    <button type="submit">Créer le Match</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
+            <div class="form-actions">
+                <button type="submit" class="button">Créer le Match</button>
+            </div>
+        </form>
+    </section>
+</main>
 {% endblock %}
+
+
 {% block script %}
     <script src="/js/script.js"></script>
     <script>
@@ -75,5 +71,4 @@
     const equipe1Id = {{ equipe1Id|default('null') }};
     const equipe2Id = {{ equipe2Id|default('null') }};
 </script>
-
 {% endblock %}

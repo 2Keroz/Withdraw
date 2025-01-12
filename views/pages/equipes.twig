@@ -1,43 +1,29 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/equipes.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <div>
-                <div>
-                    <h1>Liste des Équipes</h1>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nom</th>
-                                    <th>Acronyme</th>
-                                    <th>Jeu</th>
-                                    <th>Compétition</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for equipe in equipes %}
-                                    <tr>
-                                        <td>{{ equipe.id }}</td>
-                                        <td>{{ equipe.nom }}</td>
-                                        <td>{{ equipe.acronyme }}</td>
-                                        <td>{{ equipe.jeu.nom }}</td>
-                                        <td>{{ equipe.competition.nom }}</td>
-                                        <td>
-                                            <form action="/admin/equipe/{{ equipe.id }}/supprimer" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+<main>
+    <section class="form-section">
+        <h1>Liste des Équipes</h1>
+
+        <div class="cards-container">
+            {% for equipe in equipes %}
+            <div class="card">
+                <h2>{{ equipe.nom }}</h2>
+                <p><strong>Acronyme:</strong> {{ equipe.acronyme }}</p>
+                <p><strong>Jeu:</strong> {{ equipe.jeu.nom }}</p>
+                <p><strong>Compétition:</strong> {{ equipe.competition.nom }}</p>
+                <div class="card-actions">
+                    <form action="/admin/equipe/{{ equipe.id }}/supprimer" method="POST">
+                        <button type="submit" class="button danger-button">Supprimer</button>
+                    </form>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
+    </section>
+</main>
 {% endblock %}

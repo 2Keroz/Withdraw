@@ -1,54 +1,80 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+    <link href="/css/mesParis.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <h1>Mes Paris</h1>
+<main>
+    <section class="paris-en-cours">
+        <h2>Paris en cours</h2>
+        {% if parisEnCours is not empty %}
+            <ul>
+                {% for pari in parisEnCours %}
+                    <li>
+                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
+                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
+                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
+                        <p>
+                            <strong>Status :</strong>
+                            <span class="
+                                {% if pari.status == 'GAGNE' %}
+                                    status-gagne
+                                {% elseif pari.status == 'PERDU' %}
+                                    status-perdu
+                                {% else %}
+                                    status-autre
+                                {% endif %}
+                            ">
+                                {{ pari.status }}
+                            </span>
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun pari en cours.</p>
+        {% endif %}
+    </section>
 
-            <h2>Paris en cours</h2>
-            {% if parisEnCours is not empty %}
-                <ul>
-                    {% for pari in parisEnCours %}
-                        <li>
-                            <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
-                            <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
-                            <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
-                            <p><strong>Status :</strong> {{ pari.status }}</p>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>Aucun pari en cours.</p>
-            {% endif %}
-
-            <h2>Paris terminés</h2>
-            {% if parisTermines is not empty %}
-                <ul>
-                    {% for pari in parisTermines %}
-                        <li>
-                            <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
-                            <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
-                            <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
-                            <p><strong>Gain :</strong>
-                                <span>
-                                    {% if pari.status == 'GAGNE' %}
-                                        {{ pari.points_mises * 2 }}
-                                    {% else %}
-                                        0
-                                    {% endif %}
-                                </span>
-                            </p>
-                            <p><strong>Status :</strong>
-                                <span>
-                                    {{ pari.status }}
-                                </span>
-                            </p>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>Aucun pari terminé.</p>
-            {% endif %}
-        </div>
-    </div>
+    <section class="paris-termines">
+        <h2>Paris terminés</h2>
+        {% if parisTermines is not empty %}
+            <ul>
+                {% for pari in parisTermines %}
+                    <li>
+                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
+                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
+                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
+                        <p><strong>Gain :</strong> 
+                            <span>
+                                {% if pari.status == 'GAGNE' %}
+                                    {{ pari.points_mises * 2 }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Status :</strong>
+                            <span class="
+                                {% if pari.status == 'GAGNE' %}
+                                    status-gagne
+                                {% elseif pari.status == 'PERDU' %}
+                                    status-perdu
+                                {% else %}
+                                    status-autre
+                                {% endif %}
+                            ">
+                                {{ pari.status }}
+                            </span>
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun pari terminé.</p>
+        {% endif %}
+    </section>
+</main>
 {% endblock %}

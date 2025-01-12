@@ -1,22 +1,26 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/creerJeu.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <h1>Créer un Jeu</h1>
-            <form action="/admin/jeu/creer" method="POST">
-                <div>
-                    <label for="nom">Nom du jeu</label>
-                    <input type="text" name="nom" id="nom" required>
-                </div>
-                <div>
-                    <label for="description">Description</label>
-                    <textarea name="description" id="description" required></textarea>
-                </div>
-                <div>
-                    <button type="submit">Créer Jeu</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<main>
+    <section class="form-section">
+        <h1>Créer un Jeu</h1>
+        <form action="/admin/jeu/creer" method="POST" class="responsive-form">
+            <div class="form-group">
+                <label for="nom">Nom du jeu</label>
+                <input type="text" name="nom" id="nom" placeholder="Nom du jeu" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="5" placeholder="Description" required></textarea>
+            </div>
+            <div>
+                <button type="submit" class="button">Créer Jeu</button>
+            </div>
+        </form>
+    </section>
+</main>
 {% endblock %}

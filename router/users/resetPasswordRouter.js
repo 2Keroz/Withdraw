@@ -108,7 +108,6 @@ resetPasswordRouter.post('/mot-de-passe-reinitialisation', async (req, res) => {
       where: { id: resetToken.id },
     });
   
-    // res.send('Votre mot de passe a été mis à jour avec succès.');
     res.render('pages/mot-de-passe-reinitilisation-success.twig')
   });
 

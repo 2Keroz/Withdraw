@@ -2,7 +2,7 @@ model Jeu {
     id           Int           @id @default(autoincrement())
     nom          String
     description  String?
-    competitions Competition[]  // Relation avec les compétitions
-    equipes      Equipe[]       // Relation avec les équipes
-    matchs       Match[]        // Relation avec les matchs
+    competitions Competition[] 
+    equipes      Equipe[]      
+    matchs       Match[]      
 }

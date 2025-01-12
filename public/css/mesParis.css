@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Montserrat", serif;
+}
+
+h1, h2 {
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    padding: 20px;
+    margin: auto;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+section ul li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+section ul li p {
+    margin: 0 0 10px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333;
+}
+
+section ul li p strong {
+    color: #333;
+    font-weight: bold;
+}
+
+section ul li span {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.status-gagne {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.status-perdu {
+    color: #fff;
+    background-color: #dc3545; 
+}
+
+.status-autre {
+    color: #fff;
+    background-color: #6c757d; 
+}
+
+section p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #666;
+    text-align: center;
+}
+
+.paris-en-cours {
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 15px;
+    }
+
+    section h2 {
+        font-size: 1.3em;
+    }
+
+    section ul li p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    section {
+        padding: 10px;
+    }
+
+    section h2 {
+        font-size: 1.2em;
+    }
+
+    section ul li p {
+        font-size: 0.85em;
+    }
+}

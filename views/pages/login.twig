@@ -1,26 +1,30 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+	<link href="/css/login.css" rel="stylesheet">
+{% endblock %}
 {% block main %}
-    <div>
-        <div>
-            <h1>Se connecter</h1>
-            <form action="/login" method="POST">
-                <div>
-                    <input autocomplete="mail" id="mail" type="text" name="mail" placeholder="Email" required>
-                </div>
-                <div>
-                    <input id="password" type="password" name="password" placeholder="Mot de passe" required>
-                </div>
-                <div>
-                    <input type="submit" value="Connexion">
-                </div>
-            </form>
-            <p>
-                <a href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
-            </p>
-            <p>Pas encore inscrit ?
-                <a href="/register">Cliquez ici</a>
-            </p>
-        </div>
-    </div>
+<main>
+	<section class="login-section">
+			<h1>Se connecter</h1>
+			<form action="/login" method="POST" class="login-form">
+				<div>
+					<input id="mail" type="text" name="mail" placeholder="Email" required class="input-field">
+				</div>
+				<div>
+					<input id="password" type="password" name="password" placeholder="Mot de passe" required class="input-field">
+				</div>
+				<div>
+					<input type="submit" value="Connexion" class="submit-button">
+				</div>
+			</form>
+			<p>
+				<a href="/mot-de-passe-oublie" class="forgot-link red-link">Mot de passe oublié ?</a>
+			</p>
+			<p>
+				Pas encore inscrit ?
+				<a href="/register" class="register-link red-link">Cliquez ici</a>
+			</p>
+	</section>
+</main>
 {% endblock %}

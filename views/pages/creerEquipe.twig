@@ -1,51 +1,52 @@
 {% extends "../layouts/base.twig" %}
 
-{% block main %}
-    <div>
-        <div>
-            <h1>Créer une Équipe</h1>
-            <form action="/admin/equipe/creer" method="POST">
-                <!-- Champ pour le nom de l'équipe -->
-                <div>
-                    <label for="nom">Nom de l'équipe</label>
-                    <input type="text" name="nom" id="nom" required>
-                </div>
-
-                <!-- Champ pour l'acronyme de l'équipe -->
-                <div>
-                    <label for="acronyme">Acronyme de l'équipe</label>
-                    <input type="text" name="acronyme" id="acronyme" required>
-                </div>
-
-                <!-- Sélection du jeu -->
-                <div>
-                    <label for="jeuId">Jeu</label>
-                    <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
-                        <option value="">-- Sélectionnez un jeu --</option>
-                        {% for jeu in jeux %}
-                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <!-- Sélection de la compétition -->
-                <div>
-                    <label for="competitionId">Compétition</label>
-                    <select name="competitionId" id="competitionId" required>
-                        <option value="">-- Sélectionnez une compétition --</option>
-                    </select>
-                </div>
-                <div>
-                    <button type="submit">Créer l'équipe</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+{% block style %}
+<link href="/css/creerEquipe.css" rel="stylesheet">
 {% endblock %}
+
+{% block main %}
+<main>
+    <section class="form-section">
+        <h1>Créer une Équipe</h1>
+        <form action="/admin/equipe/creer" method="POST" class="responsive-form">
+            <div class="form-group">
+                <label for="nom">Nom de l'équipe</label>
+                <input type="text" name="nom" id="nom" placeholder="Nom de l'équipe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="acronyme">Acronyme de l'équipe</label>
+                <input type="text" name="acronyme" id="acronyme" placeholder="Acronyme" required>
+            </div>
+
+            <div class="form-group">
+                <label for="jeuId">Jeu</label>
+                <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
+                    <option value="">-- Sélectionnez un jeu --</option>
+                    {% for jeu in jeux %}
+                        <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="competitionId">Compétition</label>
+                <select name="competitionId" id="competitionId" required>
+                    <option value="">-- Sélectionnez une compétition --</option>
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="button">Créer l'équipe</button>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}
+
 {% block script %}
 <script src="/js/script.js"></script>
-    <script>
-        const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
-    </script>
+<script>
+    const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
+</script>
 {% endblock %}

@@ -1,41 +1,28 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/competitions.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <div>
-                <div>
-                    <h1>Liste des Compétitions</h1>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nom</th>
-                                    <th>Description</th>
-                                    <th>Jeu</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for competition in competitions %}
-                                    <tr>
-                                        <td>{{ competition.id }}</td>
-                                        <td>{{ competition.nom }}</td>
-                                        <td>{{ competition.description }}</td>
-                                        <td>{{ competition.jeu.nom }}</td>
-                                        <td>
-                                            <form action="/admin/competition/{{ competition.id }}/supprimer" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+<main>
+    <section class="form-section">
+        <h1>Liste des Compétitions</h1>
+
+        <div class="cards-container">
+            {% for competition in competitions %}
+            <div class="card">
+                <h2>{{ competition.nom }}</h2>
+                <p>{{ competition.description }}</p>
+                <p><strong>Jeu:</strong> {{ competition.jeu.nom }}</p>
+                <div class="card-actions">
+                    <form action="/admin/competition/{{ competition.id }}/supprimer" method="POST">
+                        <button type="submit" class="button danger-button">Supprimer</button>
+                    </form>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
+    </section>
+</main>
 {% endblock %}

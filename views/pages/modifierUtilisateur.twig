@@ -1,42 +1,52 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/modifierUtilisateur.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
+<main>
+    <section>
             <h1>Modifier l'utilisateur</h1>
+
+
+        <article>
             <form action="/admin/utilisateur/{{ utilisateur.id }}/modifier" method="POST">
-                <div>
-                    <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required>
-                </div>
+                <fieldset>
+                    <div>
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}" required>
+                    </div>
 
-                <div>
-                    <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required>
-                </div>
+                    <div>
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" value="{{ utilisateur.prenom }}" required>
+                    </div>
 
-                <div>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required>
-                </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ utilisateur.email }}" required>
+                    </div>
 
-                <div>
-                    <label for="points">Points</label>
-                    <input type="number" id="points" name="points" value="{{ utilisateur.points }}" required>
-                </div>
+                    <div>
+                        <label for="points">Points</label>
+                        <input type="number" id="points" name="points" value="{{ utilisateur.points }}" required>
+                    </div>
 
-                <div>
-                    <label for="role">Rôle</label>
-                    <select id="role" name="role">
-                        <option value="USER" {% if utilisateur.role == 'USER' %}selected{% endif %}>USER</option>
-                        <option value="ADMIN" {% if utilisateur.role == 'ADMIN' %}selected{% endif %}>ADMIN</option>
-                    </select>
-                </div>
+                    <div>
+                        <label for="role">Rôle</label>
+                        <select id="role" name="role">
+                            <option value="USER" {% if utilisateur.role == 'USER' %}selected{% endif %}>USER</option>
+                            <option value="ADMIN" {% if utilisateur.role == 'ADMIN' %}selected{% endif %}>ADMIN</option>
+                        </select>
+                    </div>
 
-                <div>
-                    <button type="submit">Modifier</button>
-                </div>
+                    <div>
+                        <button type="submit">Modifier</button>
+                    </div>
+                </fieldset>
             </form>
-        </div>
-    </div>
+        </article>
+    </section>
+</main>
 {% endblock %}

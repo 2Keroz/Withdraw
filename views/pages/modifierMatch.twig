@@ -1,11 +1,18 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/modifierMatch.css" rel="stylesheet">
+{% endblock %}
+
+
 {% block main %}
-    <div>
-        <div>
+<main>
+    <section>
             <h1>Modifier le Match</h1>
+
+
+        <article>
             <form action="/admin/match/{{ match.id }}/modifier" method="POST">
-                <!-- Sélection du jeu -->
                 <div>
                     <label for="jeuId">Jeu</label>
                     <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
@@ -16,7 +23,6 @@
                     </select>
                 </div>
 
-                <!-- Sélection de la compétition -->
                 <div>
                     <label for="competitionId">Compétition</label>
                     <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()">
@@ -31,7 +37,6 @@
                     </select>
                 </div>
 
-                <!-- Sélection des équipes -->
                 <div>
                     <label for="equipe1Id">Équipe 1</label>
                     <select name="equipe1Id" id="equipe1Id" required>
@@ -45,8 +50,6 @@
                         <option value="">-- Sélectionnez l'équipe 2 --</option>
                     </select>
                 </div>
-
-                <!-- Champ pour la date et l'heure -->
                 <div>
                     <label for="date">Date et Heure</label>
                     <input type="datetime-local" name="date" id="date" value="{{ match.date|date('Y-m-d\TH:i') }}" required>
@@ -56,12 +59,13 @@
                     <button type="submit">Modifier le Match</button>
                 </div>
             </form>
-        </div>
-    </div>
+        </article>
+    </section>
+</main>
 {% endblock %}
 
 {% block script %}
-<script src="/js/script.js"></script>
+    <script src="/js/script.js"></script>
     <script>
         const competitionsByJeu = {{ competitionsByJeu|json_encode()|raw }};
         const matchJeuId = {{ match.jeuId }};

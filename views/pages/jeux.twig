@@ -1,39 +1,27 @@
 {% extends "../layouts/base.twig" %}
 
+{% block style %}
+<link href="/css/jeux.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
-            <div>
-                <div>
-                    <h1>Liste des Jeux</h1>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nom</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for jeu in jeux %}
-                                    <tr>
-                                        <td>{{ jeu.id }}</td>
-                                        <td>{{ jeu.nom }}</td>
-                                        <td>{{ jeu.description }}</td>
-                                        <td>
-                                            <form action="/admin/jeu/{{ jeu.id }}/supprimer" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+<main>
+    <section class="form-section">
+        <h1>Liste des Jeux</h1>
+
+        <div class="cards-container">
+            {% for jeu in jeux %}
+            <div class="card">
+                <h2>{{ jeu.nom }}</h2>
+                <p>{{ jeu.description }}</p>
+                <div class="card-actions">
+                    <form action="/admin/jeu/{{ jeu.id }}/supprimer" method="POST">
+                        <button type="submit" class="button danger-button">Supprimer</button>
+                    </form>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
+    </section>
+</main>
 {% endblock %}

@@ -1,19 +1,26 @@
 {% extends "../layouts/base.twig" %}
 
+
+{% block style %}
+<link href="/css/mot-de-passe-reinitilisation-success.css" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
-    <div>
-        <div>
+<main>
+    <section>
             <h1>Changement de mot de passe</h1>
-            <div>
-                <p>Le mot de passe a bien été changé.</p>
-                <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <p>Votre mot de passe a été mis à jour avec succès.</p>
-            </div>
-            <div>
-                <a href="/login">Se connecter</a>
-            </div>
-        </div>
-    </div>
+
+        <article>
+            <p>Le mot de passe a bien été changé.</p>
+            <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p>Votre mot de passe a été mis à jour avec succès.</p>
+        </article>
+
+        <footer>
+            <a href="/login">Se connecter</a>
+        </footer>
+    </section>
+</main>
 {% endblock %}
