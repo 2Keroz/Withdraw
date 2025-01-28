@@ -1,66 +1,157 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/modifierMatch.css" rel="stylesheet">
-{% endblock %}
-
-
 {% block main %}
-<main>
-    <section>
-            <h1>Modifier le Match</h1>
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+            <!-- En-tête -->
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            Modifier le Match
+                        </h1>
+                        <p class="text-sm text-gray-500">
+                            Modifiez les informations du match
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-
-        <article>
-            <form action="/admin/match/{{ match.id }}/modifier" method="POST">
+            <!-- Formulaire -->
+            <form action="/admin/match/{{ match.id }}/modifier" method="POST" class="p-6 space-y-6">
+                <!-- Sélection du jeu -->
                 <div>
-                    <label for="jeuId">Jeu</label>
-                    <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
-                        <option value="">-- Sélectionnez un jeu --</option>
-                        {% for jeu in jeux %}
-                            <option value="{{ jeu.id }}" {% if jeu.id == match.jeuId %}selected{% endif %}>{{ jeu.nom }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="jeuId" class="block text-sm font-medium text-gray-700">
+                        Jeu
+                    </label>
+                    <div class="mt-1">
+                        <select name="jeuId" 
+                                id="jeuId" 
+                                required 
+                                onchange="filtrerCompetitions()"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
+                            <option value="">-- Sélectionnez un jeu --</option>
+                            {% for jeu in jeux %}
+                                <option value="{{ jeu.id }}" {% if jeu.id == match.jeuId %}selected{% endif %}>
+                                    {{ jeu.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
+                <!-- Sélection de la compétition -->
                 <div>
-                    <label for="competitionId">Compétition</label>
-                    <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()">
-                        <option value="">-- Sélectionnez une compétition --</option>
-                        {% for jeuId, competitions in competitionsByJeu %}
-                            <optgroup label="Jeu ID: {{ jeuId }}">
-                                {% for competition in competitions %}
-                                    <option value="{{ competition.id }}" {% if competition.id == match.competitionId %}selected{% endif %}>{{ competition.nom }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
+                    <label for="competitionId" class="block text-sm font-medium text-gray-700">
+                        Compétition
+                    </label>
+                    <div class="mt-1">
+                        <select name="competitionId" 
+                                id="competitionId" 
+                                required 
+                                onchange="filtrerEquipes()"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
+                            <option value="">-- Sélectionnez une compétition --</option>
+                            {% for jeuId, competitions in competitionsByJeu %}
+                                <optgroup label="Jeu ID: {{ jeuId }}">
+                                    {% for competition in competitions %}
+                                        <option value="{{ competition.id }}" {% if competition.id == match.competitionId %}selected{% endif %}>
+                                            {{ competition.nom }}
+                                        </option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
-                <div>
-                    <label for="equipe1Id">Équipe 1</label>
-                    <select name="equipe1Id" id="equipe1Id" required>
-                        <option value="">-- Sélectionnez l'équipe 1 --</option>
-                    </select>
+                <!-- Sélection des équipes -->
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <div>
+                        <label for="equipe1Id" class="block text-sm font-medium text-gray-700">
+                            Équipe 1
+                        </label>
+                        <div class="mt-1">
+                            <select name="equipe1Id" 
+                                    id="equipe1Id" 
+                                    required
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
+                                <option value="">-- Sélectionnez l'équipe 1 --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="equipe2Id" class="block text-sm font-medium text-gray-700">
+                            Équipe 2
+                        </label>
+                        <div class="mt-1">
+                            <select name="equipe2Id" 
+                                    id="equipe2Id" 
+                                    required
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
+                                <option value="">-- Sélectionnez l'équipe 2 --</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Date et heure -->
                 <div>
-                    <label for="equipe2Id">Équipe 2</label>
-                    <select name="equipe2Id" id="equipe2Id" required>
-                        <option value="">-- Sélectionnez l'équipe 2 --</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="date">Date et Heure</label>
-                    <input type="datetime-local" name="date" id="date" value="{{ match.date|date('Y-m-d\TH:i') }}" required>
+                    <label for="date" class="block text-sm font-medium text-gray-700">
+                        Date et Heure
+                    </label>
+                    <div class="mt-1">
+                        <input type="datetime-local" 
+                               name="date" 
+                               id="date" 
+                               value="{{ match.date|date('Y-m-d\\TH:i') }}" 
+                               required
+                               class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                    </div>
                 </div>
 
-                <div>
-                    <button type="submit">Modifier le Match</button>
+                <!-- Message d'avertissement -->
+                <div class="rounded-md bg-yellow-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">
+                                Attention
+                            </h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p>
+                                    La modification d'un match peut avoir un impact sur les équipes et la compétition.
+                                    Assurez-vous que les nouvelles informations sont correctes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <a href="/admin" 
+                       class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+                        Enregistrer les modifications
+                    </button>
                 </div>
             </form>
-        </article>
-    </section>
+        </div>
+    </div>
 </main>
 {% endblock %}
 

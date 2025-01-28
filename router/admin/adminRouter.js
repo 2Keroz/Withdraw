@@ -4,6 +4,9 @@ const authguard = require('../../services/authguard');
 
 const prisma = new PrismaClient();
 
+// Regex pattern pour les noms (lettres et chiffres uniquement)
+const namePattern = /^[a-zA-Z0-9\s]+$/;
+
 adminRouter.get('/admin', authguard, async (req, res) => {
     try {
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
@@ -184,6 +187,13 @@ adminRouter.post('/admin/jeu/creer', authguard, async (req, res) => {
     try {
         const { nom, description } = req.body;
 
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            return res.render("pages/creerJeu.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres"
+            });
+        }
+
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
             await prisma.jeu.create({
                 data: {
@@ -224,6 +234,15 @@ adminRouter.post('/admin/jeu/:id/supprimer', authguard, async (req, res) => {
 adminRouter.post('/admin/competition/creer', authguard, async (req, res) => {
     try {
         const { nom, description, jeuId } = req.body;
+
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            const jeux = await prisma.jeu.findMany();
+            return res.render("pages/creerCompetition.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres",
+                jeux
+            });
+        }
 
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
             await prisma.competition.create({
@@ -287,6 +306,50 @@ adminRouter.post('/admin/equipe/creer', authguard, async (req, res) => {
     try {
         const { nom, acronyme, jeuId, competitionId } = req.body;
 
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            const jeux = await prisma.jeu.findMany();
+            const competitions = await prisma.competition.findMany({
+                include: { jeu: true },
+            });
+            const competitionsByJeu = competitions.reduce((acc, competition) => {
+                if (!acc[competition.jeuId]) {
+                    acc[competition.jeuId] = [];
+                }
+                acc[competition.jeuId].push(competition);
+                return acc;
+            }, {});
+
+            return res.render("pages/creerEquipe.twig", {
+                error: { nom: "Le nom ne doit contenir que des lettres et des chiffres" },
+                jeux,
+                competitionsByJeu,
+                utilisateur: req.session.utilisateur
+            });
+        }
+
+        // Validation de l'acronyme
+        if (!namePattern.test(acronyme)) {
+            const jeux = await prisma.jeu.findMany();
+            const competitions = await prisma.competition.findMany({
+                include: { jeu: true },
+            });
+            const competitionsByJeu = competitions.reduce((acc, competition) => {
+                if (!acc[competition.jeuId]) {
+                    acc[competition.jeuId] = [];
+                }
+                acc[competition.jeuId].push(competition);
+                return acc;
+            }, {});
+
+            return res.render("pages/creerEquipe.twig", {
+                error: { acronyme: "L'acronyme ne doit contenir que des lettres et des chiffres" },
+                jeux,
+                competitionsByJeu,
+                utilisateur: req.session.utilisateur
+            });
+        }
+
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
             await prisma.equipe.create({
                 data: {
@@ -313,22 +376,22 @@ adminRouter.get('/admin/equipe/creer', authguard, async (req, res) => {
             return res.redirect("/home");
         }
 
-        const jeux = await prisma.jeu.findMany();
+                const jeux = await prisma.jeu.findMany();
         const competitions = await prisma.competition.findMany({
             include: { jeu: true },
         });
 
-        const competitionsByJeu = competitions.reduce((acc, competition) => {
+                const competitionsByJeu = competitions.reduce((acc, competition) => {
             if (!acc[competition.jeuId]) {
                 acc[competition.jeuId] = [];
             }
-            acc[competition.jeuId].push(competition);
-            return acc;
-        }, {});
-
-        return res.render("pages/creerEquipe.twig", {
-            jeux,
-            competitionsByJeu,
+                    acc[competition.jeuId].push(competition);
+                    return acc;
+                }, {});
+                
+                return res.render("pages/creerEquipe.twig", {
+                    jeux,
+                    competitionsByJeu,
             utilisateur: req.session.utilisateur
         });
 
@@ -371,7 +434,7 @@ adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res)
         console.error("Erreur lors de la suppression de la compétition:", error);
         res.redirect("/admin");
     }
-});
+                });
 
 
 //////////////////////////////////////////////////////////////////////////// Traite la soumission du formulaire de création d'équipe ////////////////////////////////////////////////////////////////////////////
@@ -453,7 +516,25 @@ adminRouter.get('/admin/match/creer', authguard, async (req, res) => {
 //////////////////////////////////////////////////////////////////////////// Traite le form création de match ////////////////////////////////////////////////////////////////////////////
 adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
     try {
-        const { equipe1Id, equipe2Id, competitionId, jeuId, date } = req.body;
+        const { equipe1Id, equipe2Id, competitionId, jeuId, date, nom } = req.body;
+
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            const jeux = await prisma.jeu.findMany();
+            const competitions = await prisma.competition.findMany({
+                include: { jeu: true }
+            });
+            const equipes = await prisma.equipe.findMany({
+                include: { jeu: true, competition: true }
+            });
+            
+            return res.render("pages/creerMatch.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres",
+                jeux,
+                competitions,
+                equipes
+            });
+        }
 
         if (!equipe1Id || !equipe2Id || !competitionId || !jeuId || !date) {
             return res.status(400).send("Tous les champs sont requis.");
@@ -486,7 +567,8 @@ adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
                 equipe2Id: parseInt(equipe2Id),
                 date: new Date(date),
                 competitionId: parseInt(competitionId),
-                jeuId: parseInt(jeuId)
+                jeuId: parseInt(jeuId),
+                nom
             },
         });
 
@@ -571,7 +653,35 @@ adminRouter.get('/admin/match/:id/modifier', authguard, async (req, res) => {
 adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
     try {
         const { id } = req.params;
-        const { jeuId, competitionId, equipe1Id, equipe2Id, date } = req.body;
+        const { jeuId, competitionId, equipe1Id, equipe2Id, date, nom } = req.body;
+
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            const match = await prisma.match.findUnique({
+                where: { id: parseInt(id) },
+                include: {
+                    jeu: true,
+                    competition: true,
+                }
+            });
+            const jeux = await prisma.jeu.findMany();
+            const competitionsByJeu = {};
+
+            const competitions = await prisma.competition.findMany();
+            competitions.forEach(comp => {
+                if (!competitionsByJeu[comp.jeuId]) {
+                    competitionsByJeu[comp.jeuId] = [];
+                }
+                competitionsByJeu[comp.jeuId].push(comp);
+            });
+
+            return res.render("pages/modifierMatch.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres",
+                match,
+                jeux,
+                competitionsByJeu
+            });
+        }
 
         await prisma.match.update({
             where: { id: parseInt(id) },
@@ -581,6 +691,7 @@ adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
                 equipe1Id: parseInt(equipe1Id),
                 equipe2Id: parseInt(equipe2Id),
                 date: new Date(date),
+                nom
             },
         });
 

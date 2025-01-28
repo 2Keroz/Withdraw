@@ -1,80 +1,92 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-    <link href="/css/mesParis.css" rel="stylesheet">
-{% endblock %}
-
 {% block main %}
-<main>
-    <section class="paris-en-cours">
-        <h2>Paris en cours</h2>
-        {% if parisEnCours is not empty %}
-            <ul>
-                {% for pari in parisEnCours %}
-                    <li>
-                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
-                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
-                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
-                        <p>
-                            <strong>Status :</strong>
-                            <span class="
-                                {% if pari.status == 'GAGNE' %}
-                                    status-gagne
-                                {% elseif pari.status == 'PERDU' %}
-                                    status-perdu
-                                {% else %}
-                                    status-autre
-                                {% endif %}
-                            ">
-                                {{ pari.status }}
-                            </span>
-                        </p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Aucun pari en cours.</p>
-        {% endif %}
-    </section>
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Paris en cours -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris en cours</h2>
+            {% if parisEnCours is not empty %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for pari in parisEnCours %}
+                        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-200">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="text-lg font-semibold text-gray-900">{{ pari.equipe_choisie }}</div>
+                                <div class="px-3 py-1 rounded-full text-sm font-medium
+                                    {% if pari.status == 'GAGNE' %}
+                                        bg-green-100 text-green-800
+                                    {% elseif pari.status == 'PERDU' %}
+                                        bg-red-100 text-red-800
+                                    {% else %}
+                                        bg-yellow-100 text-yellow-800
+                                    {% endif %}">
+                                    {{ pari.status }}
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-gray-600">
+                                    <span class="font-medium">Points misés :</span>
+                                    <span class="text-red-600 font-semibold">{{ pari.points_mises }}</span>
+                                </p>
+                                <p class="text-gray-600">
+                                    <span class="font-medium">Date du pari :</span>
+                                    <span>{{ pari.date_pari | date("d/m/Y H:i") }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500 text-center py-8 bg-white rounded-xl shadow">Aucun pari en cours.</p>
+            {% endif %}
+        </div>
 
-    <section class="paris-termines">
-        <h2>Paris terminés</h2>
-        {% if parisTermines is not empty %}
-            <ul>
-                {% for pari in parisTermines %}
-                    <li>
-                        <p><strong>Équipe choisie :</strong> {{ pari.equipe_choisie }}</p>
-                        <p><strong>Date du pari :</strong> {{ pari.date_pari | date("d/m/Y H:i") }}</p>
-                        <p><strong>Points misés :</strong> {{ pari.points_mises }}</p>
-                        <p><strong>Gain :</strong> 
-                            <span>
-                                {% if pari.status == 'GAGNE' %}
-                                    {{ pari.points_mises * 2 }}
-                                {% else %}
-                                    0
-                                {% endif %}
-                            </span>
-                        </p>
-                        <p>
-                            <strong>Status :</strong>
-                            <span class="
-                                {% if pari.status == 'GAGNE' %}
-                                    status-gagne
-                                {% elseif pari.status == 'PERDU' %}
-                                    status-perdu
-                                {% else %}
-                                    status-autre
-                                {% endif %}
-                            ">
-                                {{ pari.status }}
-                            </span>
-                        </p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Aucun pari terminé.</p>
-        {% endif %}
-    </section>
+        <!-- Paris terminés -->
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris terminés</h2>
+            {% if parisTermines is not empty %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for pari in parisTermines %}
+                        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-200">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="text-lg font-semibold text-gray-900">{{ pari.equipe_choisie }}</div>
+                                <div class="px-3 py-1 rounded-full text-sm font-medium
+                                    {% if pari.status == 'GAGNE' %}
+                                        bg-green-100 text-green-800
+                                    {% elseif pari.status == 'PERDU' %}
+                                        bg-red-100 text-red-800
+                                    {% else %}
+                                        bg-yellow-100 text-yellow-800
+                                    {% endif %}">
+                                    {{ pari.status }}
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-gray-600">
+                                    <span class="font-medium">Points misés :</span>
+                                    <span class="text-red-600 font-semibold">{{ pari.points_mises }}</span>
+                                </p>
+                                <p class="text-gray-600">
+                                    <span class="font-medium">Date du pari :</span>
+                                    <span>{{ pari.date_pari | date("d/m/Y H:i") }}</span>
+                                </p>
+                                <p class="text-gray-600">
+                                    <span class="font-medium">Gain :</span>
+                                    <span class="{% if pari.status == 'GAGNE' %}text-green-600{% else %}text-red-600{% endif %} font-semibold">
+                                        {% if pari.status == 'GAGNE' %}
+                                            {{ pari.points_mises * 2 }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500 text-center py-8 bg-white rounded-xl shadow">Aucun pari terminé.</p>
+            {% endif %}
+        </div>
+    </div>
 </main>
 {% endblock %}

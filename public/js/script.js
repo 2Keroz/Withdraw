@@ -216,8 +216,68 @@ function closeBetModal() {
     betModal.style.display = 'none';
 }
 
+// Validation du formulaire d'inscription
+document.getElementById('registerForm')?.addEventListener('submit', function(event) {
+    // Suppression des messages d'erreur existants
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
 
+    // Récupération des champs
+    const nom = document.getElementById('nom');
+    const prenom = document.getElementById('prenom');
+    const birth = document.getElementById('birth');
+    const mail = document.getElementById('mail');
+    const password = document.getElementById('password');
+    const confirm_password = document.getElementById('confirm_password');
 
+    let hasError = false;
+
+    // Fonction pour afficher les messages d'erreur
+    const showError = (element, message) => {
+        hasError = true;
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+        errorDiv.textContent = message;
+        element.parentNode.appendChild(errorDiv);
+        element.classList.add('border-red-500');
+    };
+
+    // Validation du nom
+    if (!nom.value.trim()) {
+        showError(nom, 'Le nom est obligatoire');
+    }
+
+    // Validation du prénom
+    if (!prenom.value.trim()) {
+        showError(prenom, 'Le prénom est obligatoire');
+    }
+
+    // Validation de la date de naissance
+    if (!birth.value) {
+        showError(birth, 'La date de naissance est obligatoire');
+    }
+
+    // Validation de l'email
+    if (!mail.value.trim()) {
+        showError(mail, 'L\'email est obligatoire');
+    }
+
+    // Validation du mot de passe
+    if (!password.value) {
+        showError(password, 'Le mot de passe est obligatoire');
+    }
+
+    // Validation de la confirmation du mot de passe
+    if (!confirm_password.value) {
+        showError(confirm_password, 'La confirmation du mot de passe est obligatoire');
+    } else if (password.value !== confirm_password.value) {
+        showError(confirm_password, 'Les mots de passe ne correspondent pas');
+    }
+
+    // Empêcher la soumission du formulaire s'il y a des erreurs
+    if (hasError) {
+        event.preventDefault();
+    }
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('profileForm');
@@ -256,4 +316,37 @@ document.addEventListener('DOMContentLoaded', function () {
             passwordError.textContent = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
         }
     });
+});
+
+// Validation du formulaire de création d'équipe
+document.querySelector('form[action="/admin/equipe/creer"]')?.addEventListener('submit', function(event) {
+    // Suppression des messages d'erreur existants
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+    const nom = document.getElementById('nom');
+    const acronyme = document.getElementById('acronyme');
+    let hasError = false;
+
+    // Fonction pour afficher les messages d'erreur
+    const showError = (element, message) => {
+        hasError = true;
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+        errorDiv.textContent = message;
+        element.parentNode.appendChild(errorDiv);
+    };
+
+    // Validation du nom (lettres et chiffres uniquement)
+    if (!/^[a-zA-Z0-9\s]+$/.test(nom.value)) {
+        showError(nom, 'Le nom ne doit contenir que des lettres et des chiffres');
+    }
+
+    // Validation de l'acronyme (lettres et chiffres uniquement, sans espaces)
+    if (!/^[a-zA-Z0-9]+$/.test(acronyme.value)) {
+        showError(acronyme, 'L\'acronyme ne doit contenir que des lettres et des chiffres (sans espaces)');
+    }
+
+    if (hasError) {
+        event.preventDefault();
+    }
 });

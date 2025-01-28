@@ -1,35 +1,69 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/creerCompetition.css" rel="stylesheet">
-{% endblock %}
-
 {% block main %}
-<main>
-    <section class="form-section">
-        <h1>Créer une Compétition</h1>
-        <form action="/admin/competition/creer" method="POST" class="responsive-form">
-            <div class="form-group">
-                <label for="nom">Nom de la compétition</label>
-                <input type="text" name="nom" id="nom" placeholder="Nom de la compétition" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description de la compétition</label>
-                <input type="text" name="description" id="description" placeholder="Description" required>
-            </div>
-            <div class="form-group">
-                <label for="jeuId">Jeu associé</label>
-                <select name="jeuId" id="jeuId" required>
-                    <option value="">Sélectionnez un jeu</option>
-                    {% for jeu in jeux %}
-                        <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <button type="submit" class="button">Créer Compétition</button>
-            </div>
-        </form>
-    </section>
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-lg rounded-xl p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Créer une Compétition</h1>
+
+            <form action="/admin/competition/creer" method="POST" class="mt-8 space-y-6">
+                {% if error %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ error }}</span>
+                    </div>
+                {% endif %}
+                <div class="rounded-md shadow-sm space-y-4">
+                <!-- Nom de la compétition -->
+                <div>
+                    <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">
+                        Nom de la compétition
+                    </label>
+                    <input type="text" name="nom" id="nom" 
+                           placeholder="Entrez le nom de la compétition"
+                           required
+                           class="mt-1 block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                        Description de la compétition
+                    </label>
+                    <textarea name="description" id="description" 
+                              placeholder="Décrivez la compétition"
+                              required
+                              rows="4"
+                              class="mt-1 block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm"></textarea>
+                </div>
+
+                <!-- Jeu associé -->
+                <div>
+                    <label for="jeuId" class="block text-sm font-medium text-gray-700 mb-1">
+                        Jeu associé
+                    </label>
+                    <select name="jeuId" id="jeuId" 
+                            required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
+                        <option value="">Sélectionnez un jeu</option>
+                        {% for jeu in jeux %}
+                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="/admin" 
+                       class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition duration-200">
+                        Créer la compétition
+                    </button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
 {% endblock %}

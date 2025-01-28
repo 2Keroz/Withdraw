@@ -1,28 +1,77 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/cloturerMatch.css" rel="stylesheet">
-{% endblock %}
-
-
 {% block main %}
-    <main>
-        <section>
-            <h1>Clôturer le Match</h1>
-            <form action="/admin/match/{{ match.id }}/cloturer" method="POST">
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-lg rounded-xl p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Clôturer le Match</h1>
+                <p class="mt-2 text-sm text-gray-600">
+                    {{ match.equipe1.nom }} vs {{ match.equipe2.nom }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    Date : {{ match.date | date("d/m/Y H:i") }}
+                </p>
+            </div>
+
+            <form action="/admin/match/{{ match.id }}/cloturer" method="POST" class="space-y-6">
+                <!-- Équipe gagnante -->
                 <div>
-                    <label for="equipeGagnanteId">Équipe gagnante</label>
-                    <select name="equipeGagnanteId" id="equipeGagnanteId" required>
+                    <label for="equipeGagnanteId" class="block text-sm font-medium text-gray-700 mb-1">
+                        Sélectionnez l'équipe gagnante
+                    </label>
+                    <select name="equipeGagnanteId" 
+                            id="equipeGagnanteId" 
+                            required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
                         <option value="">-- Sélectionnez l'équipe gagnante --</option>
-                        <option value="{{ match.equipe1.id }}" {% if match.equipeGagnanteId == match.equipe1.id %}selected{% endif %}>{{ match.equipe1.nom }}</option>
-                        <option value="{{ match.equipe2.id }}" {% if match.equipeGagnanteId == match.equipe2.id %}selected{% endif %}>{{ match.equipe2.nom }}</option>
+                        <option value="{{ match.equipe1.id }}" 
+                                {% if match.equipeGagnanteId == match.equipe1.id %}selected{% endif %}
+                                class="font-medium">
+                            {{ match.equipe1.nom }}
+                        </option>
+                        <option value="{{ match.equipe2.id }}" 
+                                {% if match.equipeGagnanteId == match.equipe2.id %}selected{% endif %}
+                                class="font-medium">
+                            {{ match.equipe2.nom }}
+                        </option>
                     </select>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Cette action distribuera automatiquement les points aux gagnants des paris
+                    </p>
                 </div>
 
-                <div>
-                    <button type="submit">Clôturer le Match</button>
+                <!-- Message d'avertissement -->
+                <div class="rounded-md bg-yellow-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">
+                                Attention
+                            </h3>
+                            <p class="mt-2 text-sm text-yellow-700">
+                                Cette action est irréversible. Une fois le match clôturé, vous ne pourrez plus modifier le résultat.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="/admin" 
+                       class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+                        Clôturer le match
+                    </button>
                 </div>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+</main>
 {% endblock %}

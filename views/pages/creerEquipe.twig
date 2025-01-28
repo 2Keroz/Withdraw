@@ -1,46 +1,88 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/creerEquipe.css" rel="stylesheet">
-{% endblock %}
-
 {% block main %}
-<main>
-    <section class="form-section">
-        <h1>Créer une Équipe</h1>
-        <form action="/admin/equipe/creer" method="POST" class="responsive-form">
-            <div class="form-group">
-                <label for="nom">Nom de l'équipe</label>
-                <input type="text" name="nom" id="nom" placeholder="Nom de l'équipe" required>
-            </div>
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-lg rounded-xl p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Créer une Équipe</h1>
 
-            <div class="form-group">
-                <label for="acronyme">Acronyme de l'équipe</label>
-                <input type="text" name="acronyme" id="acronyme" placeholder="Acronyme" required>
-            </div>
+            <form action="/admin/equipe/creer" method="POST" class="space-y-6">
+                    {% if error.acronyme %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">{{ error.acronyme }}</div>
+                    {% endif %}
+                    {% if error.nom %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">{{ error.nom }}</div>
+                    {% endif %}
+                <div>
+                    <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">
+                        Nom de l'équipe
+                    </label>
+                    <input type="text" name="nom" id="nom"
+                           placeholder="Entrez le nom de l'équipe"
+                           required
+                           class="mt-1 block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
 
-            <div class="form-group">
-                <label for="jeuId">Jeu</label>
-                <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()">
-                    <option value="">-- Sélectionnez un jeu --</option>
-                    {% for jeu in jeux %}
-                        <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <label for="competitionId">Compétition</label>
-                <select name="competitionId" id="competitionId" required>
-                    <option value="">-- Sélectionnez une compétition --</option>
-                </select>
-            </div>
+                <!-- Acronyme -->
+                <div>
+                    <label for="acronyme" class="block text-sm font-medium text-gray-700 mb-1">
+                        Acronyme de l'équipe
+                    </label>
+                    <input type="text" name="acronyme" id="acronyme"
+                           placeholder="Ex: PSG, OM, OL"
+                           required
+                           class="mt-1 block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
 
-            <div>
-                <button type="submit" class="button">Créer l'équipe</button>
-            </div>
-        </form>
-    </section>
+                    <p class="mt-1 text-sm text-gray-500">
+                        L'acronyme est une version courte du nom de l'équipe
+                    </p>
+                </div>
+
+                <!-- Jeu -->
+                <div>
+                    <label for="jeuId" class="block text-sm font-medium text-gray-700 mb-1">
+                        Jeu
+                    </label>
+                    <select name="jeuId" id="jeuId"
+                            required
+                            onchange="filtrerCompetitions()"
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
+                        <option value="">-- Sélectionnez un jeu --</option>
+                        {% for jeu in jeux %}
+                            <option value="{{ jeu.id }}">{{ jeu.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Compétition -->
+                <div>
+                    <label for="competitionId" class="block text-sm font-medium text-gray-700 mb-1">
+                        Compétition
+                    </label>
+                    <select name="competitionId" id="competitionId"
+                            required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md shadow-sm">
+                        <option value="">-- Sélectionnez une compétition --</option>
+                    </select>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Sélectionnez d'abord un jeu pour voir les compétitions disponibles
+                    </p>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="/admin"
+                       class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition duration-200">
+                        Créer l'équipe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
 {% endblock %}
 

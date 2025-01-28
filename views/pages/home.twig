@@ -1,95 +1,110 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/home.css" rel="stylesheet">
-{% endblock %}
-
 {% block main %}
-<main>
-    <section>
-        <div id="left-column">
-            <article>
-                <h1>Bienvenue, {{ utilisateur.prenom }} {{ utilisateur.nom }}</h1>
-                <p>Vos points actuels : <span>{{ utilisateur.points }}</span></p>
-                <nav>
-                    <a href="/profil">Mon profil</a>
+<main class="bg-gray-100 min-h-screen p-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Colonne de gauche -->
+        <div class="md:col-span-1 space-y-6">
+            <!-- Profil utilisateur -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Bienvenue, {{ utilisateur.prenom }} {{ utilisateur.nom }}</h1>
+                <p class="text-lg mb-4">Vos points actuels : <span class="font-bold text-red-600">{{ utilisateur.points }}</span></p>
+                <nav class="space-y-3">
+                    <a href="/profil" class="block w-full text-center py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-200">Mon profil</a>
+                    <a href="/mes-paris" class="block w-full text-center py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-200">Mes Paris</a>
                     {% if utilisateur.role == 'ADMIN' %}
-                        <a href="/admin">Accéder à l'administration</a>
+                        <a href="/admin" class="block w-full text-center py-2 px-4 bg-red-600 text-white hover:bg-red-700 rounded-lg transition duration-200">Accéder à l'administration</a>
                     {% endif %}
                     <form action="/home/deconnexion" method="POST">
-                        <button type="submit">Déconnexion</button>
+                        <button type="submit" class="w-full py-2 px-4 bg-gray-800 text-white hover:bg-gray-900 rounded-lg transition duration-200">Déconnexion</button>
                     </form>
-                    <a href="/mes-paris">Mes Paris</a>
                 </nav>
-            </article>
+            </div>
 
-            <article>
-                <h2>Jeux et Compétitions</h2>
-                <ul id="jeux-list">
+            <!-- Jeux et Compétitions -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Jeux et Compétitions</h2>
+                <ul id="jeux-list" class="space-y-2">
                     {% for jeu in jeux %}
-                        <li>
-                            <a href="#" onclick="loadCompetitions({{ jeu.id }})">{{ jeu.nom }}</a>
-                            <ul id="competitions-{{ jeu.id }}" style="display: none;"></ul>
+                        <li class="border-b border-gray-200 last:border-0 py-2">
+                            <a href="#" onclick="loadCompetitions({{ jeu.id }})" class="text-gray-700 hover:text-red-600 transition duration-200">{{ jeu.nom }}</a>
+                            <ul id="competitions-{{ jeu.id }}" class="hidden pl-4 mt-2 space-y-1"></ul>
                         </li>
                     {% endfor %}
                 </ul>
-            </article>
+            </div>
         </div>
 
-        <div id="right-column">
-            <article>
-                <h2>Matchs à venir</h2>
+        <!-- Colonne de droite -->
+        <div class="md:col-span-2 space-y-6">
+            <!-- Matchs à venir -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Matchs à venir</h2>
                 <div id="matchs-container">
                     {% if matchsAvenir is not empty %}
-                        <ul>
+                        <ul class="space-y-4">
                             {% for match in matchsAvenir %}
-                                <li>
-                                    <h3>{{ match.equipe1.nom }} vs {{ match.equipe2.nom }}</h3>
-                                    <p>Date : {{ match.date | date("d/m/Y") }} à {{ match.date | date("H:i") }}</p>
-                                    <div>
-                                        <button onclick="openBetModal({{ match.id }}, '{{ match.equipe1.nom }}', {{ utilisateur.points }})">Parier sur {{ match.equipe1.nom }}</button>
-                                        <button onclick="openBetModal({{ match.id }}, '{{ match.equipe2.nom }}', {{ utilisateur.points }})">Parier sur {{ match.equipe2.nom }}</button>
+                                <li class="border rounded-lg p-4 hover:shadow-md transition duration-200">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ match.equipe1.nom }} vs {{ match.equipe2.nom }}</h3>
+                                    <p class="text-gray-600 mb-3">Date : {{ match.date | date("d/m/Y") }} à {{ match.date | date("H:i") }}</p>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <button onclick="openBetModal({{ match.id }}, '{{ match.equipe1.nom }}', {{ utilisateur.points }})" 
+                                            class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+                                            Parier sur {{ match.equipe1.nom }}
+                                        </button>
+                                        <button onclick="openBetModal({{ match.id }}, '{{ match.equipe2.nom }}', {{ utilisateur.points }})" 
+                                            class="w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+                                            Parier sur {{ match.equipe2.nom }}
+                                        </button>
                                     </div>
                                 </li>
                             {% endfor %}
-                    <div id="betModal">
-                        <div >
-                            <div>
-                                <div>
-                                    <h2 id="modalMatchTitle">Pari</h2>
-                                    <form action="/parier" method="POST">
-                                        <p id="errorBet"></p>
-                                        <input type="hidden" name="match_id" id="modalMatchId">
-                                        <input type="hidden" name="equipe_choisie" id="modalEquipeChoisie">
-                                        <label for="pointsMises" >Points à parier :</label>
-                                        <input type="number" name="points_mises" id="pointsMises">
-                                        <div>
-                                            <button type="submit" >Valider</button>
-                                            <button type="button" onclick="closeBetModal()">Annuler</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                         </ul>
                     {% else %}
-                        <p>Aucun match à venir pour le moment.</p>
+                        <p class="text-gray-600 text-center py-4">Aucun match à venir pour le moment.</p>
                     {% endif %}
                 </div>
-            </article>
-            <article>
-                <h2>Matchs passés</h2>
-                <div id="matchs-passes-container">
+            </div>
+
+            <!-- Modal de pari -->
+            <div id="betModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                <div class="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
+                    <div class="p-6">
+                        <h2 id="modalMatchTitle" class="text-xl font-bold text-gray-800 mb-4">Pari</h2>
+                        <form action="/parier" method="POST" class="space-y-4">
+                            <p id="errorBet" class="text-red-600"></p>
+                            <input type="hidden" name="match_id" id="modalMatchId">
+                            <input type="hidden" name="equipe_choisie" id="modalEquipeChoisie">
+                            <div>
+                                <label for="pointsMises" class="block text-sm font-medium text-gray-700 mb-2">Points à parier :</label>
+                                <input type="number" name="points_mises" id="pointsMises" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            </div>
+                            <div class="flex space-x-4">
+                                <button type="submit" class="flex-1 py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+                                    Valider
+                                </button>
+                                <button type="button" onclick="closeBetModal()" 
+                                    class="flex-1 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-200">
+                                    Annuler
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </article>
+            </div>
+
+            <!-- Matchs passés -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Matchs passés</h2>
+                <div id="matchs-passes-container" class="space-y-4">
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
 </main>
 {% endblock %}
 
 {% block script %}
-
 {% if utilisateur and utilisateur.points is defined %}
     <script>
         let userPoints = {{ utilisateur.points }};

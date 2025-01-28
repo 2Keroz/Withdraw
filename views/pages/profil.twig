@@ -1,28 +1,48 @@
 {% extends "../layouts/base.twig" %}
-
-{% block style %}
-<link href="/css/profil.css" rel="stylesheet">
-{% endblock %}
-
 {% block main %}
-<main>
-    <section>
-            <h1>Mon Profil</h1>
+<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-lg rounded-xl p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Mon Profil</h1>
 
-        <article>
-            <p><span>Nom :</span> {{ utilisateur.nom }}</p>
-            <p><span>Prénom :</span> {{ utilisateur.prenom }}</p>
-            <p><span>Email :</span> {{ utilisateur.email }}</p>
-            <p><span>Date de naissance :</span> {{ utilisateur.date_naissance }}</p>
-            <p><span>Mes points :</span> <span>{{ utilisateur.points }}</span></p>
-        </article>
+            <div class="space-y-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500 mb-1">Nom</p>
+                        <p class="text-lg font-medium">{{ utilisateur.nom }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500 mb-1">Prénom</p>
+                        <p class="text-lg font-medium">{{ utilisateur.prenom }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500 mb-1">Email</p>
+                        <p class="text-lg font-medium">{{ utilisateur.email }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500 mb-1">Date de naissance</p>
+                        <p class="text-lg font-medium">{{ utilisateur.date_naissance }}</p>
+                    </div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-red-500 mb-1">Mes points</p>
+                    <p class="text-2xl font-bold text-red-600">{{ utilisateur.points }}</p>
+                </div>
+            </div>
 
-        <footer>
-            <a href="/modifierProfil">Modifier profil</a>
-            <form action="/profil/supprimer" method="POST">
-                <button type="submit">Supprimer mon compte</button>
-            </form>
-        </footer>
-    </section>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <a href="/modifierProfil" 
+                   class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition duration-200">
+                    Modifier profil
+                </a>
+                <form action="/profil/supprimer" method="POST" class="inline-block">
+                    <button type="submit" 
+                            class="w-full px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Supprimer mon compte
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
 {% endblock %}
