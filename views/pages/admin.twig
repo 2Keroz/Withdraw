@@ -1,191 +1,180 @@
 {% extends "../layouts/base.twig" %}
 
+{% block title %}WithDraw | Administration
+{% endblock %}
+
 {% block main %}
-<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1 space-y-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Gestion</h2>
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Créer</h3>
-                    <div class="space-y-3">
-                        <a href="/admin/jeu/creer" 
-                           class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Créer un Jeu
-                        </a>
-                        <a href="/admin/competition/creer" 
-                           class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Créer une Compétition
-                        </a>
-                        <a href="/admin/equipe/creer" 
-                           class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Créer une Équipe
-                        </a>
-                        <a href="/admin/match/creer" 
-                           class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Créer un Match
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Voir</h3>
-                    <div class="space-y-3">
-                        <a href="/admin/jeux" 
-                           class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
-                            Voir tous les Jeux
-                        </a>
-                        <a href="/admin/competitions" 
-                           class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
-                            Voir toutes les Compétitions
-                        </a>
-                        <a href="/admin/equipes" 
-                           class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
-                            Voir toutes les Équipes
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="lg:col-span-2 space-y-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des utilisateurs</h1>
-                
-                <form action="/admin/utilisateurs/recherche" method="GET" class="mb-6">
-                    <div class="flex gap-4">
-                        <input type="text" name="query" 
-                               placeholder="Rechercher par nom, prénom ou email" required
-                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                        <button type="submit" 
-                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </form>
+	<main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+		<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+			<div class="lg:col-span-1 space-y-8">
+				<div class="bg-white rounded-xl shadow-lg p-6">
+					<h2 class="text-2xl font-bold text-gray-900 mb-6">Gestion</h2>
+					<div class="mb-8">
+						<h3 class="text-lg font-semibold text-gray-700 mb-4">Créer</h3>
+						<div class="space-y-3">
+							<a href="/admin/jeu/creer" class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								Créer un Jeu
+							</a>
+							<a href="/admin/competition/creer" class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								Créer une Compétition
+							</a>
+							<a href="/admin/equipe/creer" class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								Créer une Équipe
+							</a>
+							<a href="/admin/match/creer" class="block w-full text-center py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								Créer un Match
+							</a>
+						</div>
+					</div>
+					<div>
+						<h3 class="text-lg font-semibold text-gray-700 mb-4">Voir</h3>
+						<div class="space-y-3">
+							<a href="/admin/jeux" class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
+								Voir tous les Jeux
+							</a>
+							<a href="/admin/competitions" class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
+								Voir toutes les Compétitions
+							</a>
+							<a href="/admin/equipes" class="block w-full text-center py-2 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200">
+								Voir toutes les Équipes
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="lg:col-span-2 space-y-8">
+				<div class="bg-white rounded-xl shadow-lg p-6">
+					<h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des utilisateurs</h1>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {% for utilisateur in utilisateurs %}
-                    <div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-2">{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
-                        <div class="space-y-1 mb-4">
-                            <p class="text-gray-600"><span class="font-medium">Email:</span> {{ utilisateur.email }}</p>
-                            <p class="text-gray-600"><span class="font-medium">Points:</span> {{ utilisateur.points }}</p>
-                            <p class="text-gray-600">
-                                <span class="font-medium">Rôle:</span> 
-                                <span class="px-2 py-1 text-sm rounded-full {% if utilisateur.role == 'ADMIN' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}">
-                                    {{ utilisateur.role }}
-                                </span>
-                            </p>
-                        </div>
-                        <div class="flex gap-4">
-                            <a href="/admin/utilisateur/{{ utilisateur.id }}/modifier" 
-                               class="flex-1 text-center py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
-                                Modifier
-                            </a>
-                            <form action="/admin/utilisateur/{{ utilisateur.id }}/supprimer" method="POST" class="flex-1"
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                                <button type="submit" 
-                                        class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
-                                    Supprimer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs non clôturés</h1>
-                
-                <form action="/admin/matchs/non-clotures/recherche" method="GET" class="mb-6">
-                    <div class="flex gap-4">
-                        <input type="text" name="query" 
-                               placeholder="Rechercher par équipe" required
-                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                        <button type="submit" 
-                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </form>
+					<form action="/admin/utilisateurs/recherche" method="GET" class="mb-6">
+						<div class="flex gap-4">
+							<input type="text" name="query" placeholder="Rechercher par nom, prénom ou email" required class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+							<button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+					</form>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {% for match in matchsNonClotures %}
-                    <div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">{{ match.equipe1.nom }} vs {{ match.equipe2.nom }}</h3>
-                            <span class="px-2 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">Non clôturé</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">
-                            <span class="font-medium">Date:</span> {{ match.date | date("d/m/Y H:i") }}
-                        </p>
-                        <div class="flex gap-4">
-                            <a href="/admin/match/{{ match.id }}/modifier" 
-                               class="flex-1 text-center py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
-                                Modifier
-                            </a>
-                            <form action="/admin/match/{{ match.id }}/supprimer" method="POST" class="flex-1"
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce match ?');">
-                                <button type="submit" 
-                                        class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
-                                    Supprimer
-                                </button>
-                            </form>
-                            {% if match.date|date('U') <= 'now'|date('U') %}
-                            <a href="/admin/match/{{ match.id }}/cloturer" 
-                               class="flex-1 text-center py-2 px-4 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition duration-200">
-                                Clôturer
-                            </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs clôturés</h1>
-                
-                <form action="/admin/matchs/clotures/recherche" method="GET" class="mb-6">
-                    <div class="flex gap-4">
-                        <input type="text" name="query" 
-                               placeholder="Rechercher par équipe" required
-                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                        <button type="submit" 
-                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </form>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						{% for utilisateur in utilisateurs %}
+							<div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
+								<h2 class="text-lg font-semibold text-gray-900 mb-2">{{ utilisateur.nom }}
+									{{ utilisateur.prenom }}</h2>
+								<div class="space-y-1 mb-4">
+									<p class="text-gray-600">
+										<span class="font-medium">Email:</span>
+										{{ utilisateur.email }}</p>
+									<p class="text-gray-600">
+										<span class="font-medium">Points:</span>
+										{{ utilisateur.points }}</p>
+									<p class="text-gray-600">
+										<span class="font-medium">Rôle:</span>
+										<span class="px-2 py-1 text-sm rounded-full {% if utilisateur.role == 'ADMIN' %}bg-red-100 text-red-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+											{{ utilisateur.role }}
+										</span>
+									</p>
+								</div>
+								<div class="flex gap-4">
+									<a href="/admin/utilisateur/{{ utilisateur.id }}/modifier" class="flex-1 text-center py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+										Modifier
+									</a>
+									<form action="/admin/utilisateur/{{ utilisateur.id }}/supprimer" method="POST" class="flex-1" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+										<button type="submit" class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
+											Supprimer
+										</button>
+									</form>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="bg-white rounded-xl shadow-lg p-6">
+					<h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs non clôturés</h1>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {% for match in matchsClotures %}
-                    <div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">{{ match.equipe1.nom }} vs {{ match.equipe2.nom }}</h3>
-                            <span class="px-2 py-1 text-sm bg-green-100 text-green-800 rounded-full">Clôturé</span>
-                        </div>
-                        <div class="space-y-2 mb-4">
-                            <p class="text-gray-600">
-                                <span class="font-medium">Date:</span> {{ match.date | date("d/m/Y H:i") }}
-                            </p>
-                            <p class="text-gray-600">
-                                <span class="font-medium">Équipe gagnante:</span> 
-                                <span class="text-green-600 font-medium">{{ match.equipeGagnante.nom }}</span>
-                            </p>
-                        </div>
-                        <div class="flex gap-4">
-                            <form action="/admin/match/{{ match.id }}/supprimer" method="POST"
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce match ?');">
-                                <button type="submit" 
-                                        class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
-                                    Supprimer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
+					<form action="/admin/matchs/non-clotures/recherche" method="GET" class="mb-6">
+						<div class="flex gap-4">
+							<input type="text" name="query" placeholder="Rechercher par équipe" required class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+							<button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+					</form>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						{% for match in matchsNonClotures %}
+							<div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
+								<div class="flex justify-between items-center mb-4">
+									<h3 class="text-lg font-semibold text-gray-900">{{ match.equipe1.nom }}
+										vs
+										{{ match.equipe2.nom }}</h3>
+									<span class="px-2 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">Non clôturé</span>
+								</div>
+								<p class="text-gray-600 mb-4">
+									<span class="font-medium">Date:</span>
+									{{ match.date | date("d/m/Y H:i") }}
+								</p>
+								<div class="flex gap-4">
+									<a href="/admin/match/{{ match.id }}/modifier" class="flex-1 text-center py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+										Modifier
+									</a>
+									<form action="/admin/match/{{ match.id }}/supprimer" method="POST" class="flex-1" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce match ?');">
+										<button type="submit" class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
+											Supprimer
+										</button>
+									</form>
+									{% if match.date|date('U') <= 'now'|date('U') %}
+										<a href="/admin/match/{{ match.id }}/cloturer" class="flex-1 text-center py-2 px-4 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition duration-200">
+											Clôturer
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="bg-white rounded-xl shadow-lg p-6">
+					<h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs clôturés</h1>
+
+					<form action="/admin/matchs/clotures/recherche" method="GET" class="mb-6">
+						<div class="flex gap-4">
+							<input type="text" name="query" placeholder="Rechercher par équipe" required class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+							<button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+					</form>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						{% for match in matchsClotures %}
+							<div class="border rounded-lg p-4 hover:shadow-md transition duration-200">
+								<div class="flex justify-between items-center mb-4">
+									<h3 class="text-lg font-semibold text-gray-900">{{ match.equipe1.nom }}
+										vs
+										{{ match.equipe2.nom }}</h3>
+									<span class="px-2 py-1 text-sm bg-green-100 text-green-800 rounded-full">Clôturé</span>
+								</div>
+								<div class="space-y-2 mb-4">
+									<p class="text-gray-600">
+										<span class="font-medium">Date:</span>
+										{{ match.date | date("d/m/Y H:i") }}
+									</p>
+									<p class="text-gray-600">
+										<span class="font-medium">Équipe gagnante:</span>
+										<span class="text-green-600 font-medium">{{ match.equipeGagnante.nom }}</span>
+									</p>
+								</div>
+								<div class="flex gap-4">
+									<form action="/admin/match/{{ match.id }}/supprimer" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce match ?');">
+										<button type="submit" class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200">
+											Supprimer
+										</button>
+									</form>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 {% endblock %}
