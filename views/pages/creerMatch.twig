@@ -12,7 +12,6 @@
                     </div>
                 {% endif %}
                 <div class="rounded-md shadow-sm space-y-4">
-                    <!-- Sélection du jeu -->
                     <div>
                         <label for="jeuId" class="block text-sm font-medium text-gray-700 mb-1">Jeu</label>
                         <select name="jeuId" id="jeuId" required onchange="filtrerCompetitions()"
@@ -23,8 +22,6 @@
                             {% endfor %}
                         </select>
                     </div>
-
-                    <!-- Sélection de la compétition -->
                     <div>
                         <label for="competitionId" class="block text-sm font-medium text-gray-700 mb-1">Compétition</label>
                         <select name="competitionId" id="competitionId" required onchange="filtrerEquipes()"
@@ -39,8 +36,6 @@
                             {% endfor %}
                         </select>
                     </div>
-
-                    <!-- Sélection des équipes -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="equipe1Id" class="block text-sm font-medium text-gray-700 mb-1">Équipe 1</label>
@@ -58,16 +53,12 @@
                             </select>
                         </div>
                     </div>
-
-                    <!-- Date et heure -->
                     <div>
                         <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date et Heure</label>
                         <input type="datetime-local" name="date" id="date" required
                             class="mt-1 block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
                         <p id="dateError" class="mt-1 text-sm text-red-600"></p>
                     </div>
-
-                    <!-- Boutons d'action -->
                     <div class="flex justify-end space-x-4 pt-6">
                         <a href="/admin" 
                             class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">

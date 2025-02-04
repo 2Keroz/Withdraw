@@ -2,9 +2,7 @@
 {% block main %}
 <main class="bg-gray-100 min-h-screen p-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Colonne de gauche -->
         <div class="md:col-span-1 space-y-6">
-            <!-- Profil utilisateur -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h1 class="text-2xl font-bold text-gray-800 mb-4">Bienvenue, {{ utilisateur.prenom }} {{ utilisateur.nom }}</h1>
                 <p class="text-lg mb-4">Vos points actuels : <span class="font-bold text-red-600">{{ utilisateur.points }}</span></p>
@@ -19,8 +17,6 @@
                     </form>
                 </nav>
             </div>
-
-            <!-- Jeux et Compétitions -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Jeux et Compétitions</h2>
                 <ul id="jeux-list" class="space-y-2">
@@ -33,10 +29,7 @@
                 </ul>
             </div>
         </div>
-
-        <!-- Colonne de droite -->
         <div class="md:col-span-2 space-y-6">
-            <!-- Matchs à venir -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Matchs à venir</h2>
                 <div id="matchs-container">
@@ -64,8 +57,6 @@
                     {% endif %}
                 </div>
             </div>
-
-            <!-- Modal de pari -->
             <div id="betModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
                 <div class="bg-white rounded-xl shadow-lg max-w-md w-full mx-4">
                     <div class="p-6">
@@ -92,8 +83,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Matchs passés -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Matchs passés</h2>
                 <div id="matchs-passes-container" class="space-y-4">

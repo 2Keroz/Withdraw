@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
+const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+
 userRouter.get('/profil', authguard, async (req, res) => {
     try {
         const utilisateur = await prisma.utilisateur.findUnique({
@@ -53,10 +57,12 @@ userRouter.get('/modifierProfil', authguard, async (req, res) => {
 });
 
 // Route modification de profil
+
 userRouter.post('/profil/modifier', authguard, async (req, res) => {
     try {
         const { nom, prenom, email, date_naissance, current_password, new_password, confirm_password } = req.body;
         const dateNaissance = new Date(date_naissance);
+        let errors = {}
 
         const utilisateur = await prisma.utilisateur.findUnique({
             where: {
@@ -64,26 +70,50 @@ userRouter.post('/profil/modifier', authguard, async (req, res) => {
             }
         });
 
-        const updateData = {
-            nom,
-            prenom,
-            email,
-            date_naissance: dateNaissance,
-        };
+        // Vérification du format de l'email
+        if (!emailPattern.test(email)) {
+            return res.render('pages/modifierProfil.twig', {
+                utilisateur,
+                errors: { email: "L'email n'est pas valide." }
+            });
+        }
+
+        const updateData = { nom, prenom, email, date_naissance: dateNaissance };
 
         if (new_password) {
+            // Vérification du format du mot de passe
+            if (!passwordPattern.test(new_password)) {
+                return res.render('pages/modifierProfil.twig', {
+                    utilisateur,
+                    errors: { password: "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial." }
+                });
+            }
 
             const isPasswordCorrect = await bcrypt.compare(current_password, utilisateur.password);
             if (!isPasswordCorrect) {
-                return res.render('pages/modifierProfil.twig', { utilisateur, errors: { password: "Le mot de passe actuel est incorrect." } });
+                return res.render('pages/modifierProfil.twig', {
+                    utilisateur,
+                    errors: { current_password: "Le mot de passe actuel est incorrect." }
+                });
             }
 
             if (new_password !== confirm_password) {
-                return res.render('pages/modifierProfil.twig', { utilisateur, errors: { confirm: "Le nouveau mot de passe et la confirmation ne correspondent pas." } });
+                return res.render('pages/modifierProfil.twig', {
+                    utilisateur,
+                    errors: { confirm: "Le nouveau mot de passe et la confirmation ne correspondent pas." }
+                });
+            }
+
+            if (Object.keys(errors).length > 0) {
+                return res.render('pages/modifierProfil.twig', {
+                    utilisateur,
+                    errors
+                });
             }
 
             updateData.password = await bcrypt.hash(new_password, 10);
         }
+
         const updatedUser = await prisma.utilisateur.update({
             where: { email: req.session.utilisateur.email },
             data: updateData

@@ -2,7 +2,6 @@
 {% block main %}
 <main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        <!-- Paris en cours -->
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris en cours</h2>
             {% if parisEnCours is not empty %}
@@ -39,8 +38,6 @@
                 <p class="text-gray-500 text-center py-8 bg-white rounded-xl shadow">Aucun pari en cours.</p>
             {% endif %}
         </div>
-
-        <!-- Paris terminés -->
         <div>
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris terminés</h2>
             {% if parisTermines is not empty %}

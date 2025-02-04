@@ -3,7 +3,6 @@
 <main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
         <div class="bg-white shadow-lg rounded-xl overflow-hidden">
-            <!-- En-tête -->
             <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -21,11 +20,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Formulaire -->
             <form action="/admin/utilisateur/{{ utilisateur.id }}/modifier" method="POST" class="p-6 space-y-6">
                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <!-- Nom -->
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700">
                             Nom
@@ -39,8 +35,6 @@
                                    class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md">
                         </div>
                     </div>
-
-                    <!-- Prénom -->
                     <div>
                         <label for="prenom" class="block text-sm font-medium text-gray-700">
                             Prénom
@@ -54,8 +48,6 @@
                                    class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md">
                         </div>
                     </div>
-
-                    <!-- Email -->
                     <div class="sm:col-span-2">
                         <label for="email" class="block text-sm font-medium text-gray-700">
                             Email
@@ -69,8 +61,6 @@
                                    class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md">
                         </div>
                     </div>
-
-                    <!-- Points -->
                     <div>
                         <label for="points" class="block text-sm font-medium text-gray-700">
                             Points
@@ -85,8 +75,6 @@
                                    class="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md">
                         </div>
                     </div>
-
-                    <!-- Rôle -->
                     <div>
                         <label for="role" class="block text-sm font-medium text-gray-700">
                             Rôle
@@ -101,8 +89,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Message d'avertissement -->
                 <div class="rounded-md bg-yellow-50 p-4">
                     <div class="flex">
                         <div class="flex-shrink-0">
@@ -123,8 +109,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Boutons d'action -->
                 <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                     <a href="/admin/" 
                        class="px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">

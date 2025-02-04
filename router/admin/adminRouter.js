@@ -960,7 +960,7 @@ adminRouter.get('/admin/jeux', authguard, async (req, res) => {
     }
 });
 
-// Route suppresion jeu
+// Route suppression jeu
 adminRouter.post('/admin/jeu/:id/supprimer', authguard, async (req, res) => {
     try {
         const { id } = req.params;
@@ -1054,7 +1054,105 @@ adminRouter.post('/admin/equipe/:id/supprimer', authguard, async (req, res) => {
     }
 });
 
+// Routes pour la modification des jeux
+adminRouter.get('/admin/jeu/:id/modifier', authguard, async (req, res) => {
+    try {
+        const jeu = await prisma.jeu.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
+        if (!jeu) {
+            return res.redirect('/admin/jeux');
+        }
+        res.render('pages/modifierJeu.twig', { jeu });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/jeux');
+    }
+});
 
+adminRouter.post('/admin/jeu/:id/modifier', authguard, async (req, res) => {
+    try {
+        await prisma.jeu.update({
+            where: { id: parseInt(req.params.id) },
+            data: {
+                nom: req.body.nom
+            }
+        });
+        res.redirect('/admin/jeux');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/jeux');
+    }
+});
 
+// Routes pour la modification des compétitions
+adminRouter.get('/admin/competition/:id/modifier', authguard, async (req, res) => {
+    try {
+        const competition = await prisma.competition.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
+        const jeux = await prisma.jeu.findMany();
+        
+        if (!competition) {
+            return res.redirect('/admin/competitions');
+        }
+        res.render('pages/modifierCompetition.twig', { competition, jeux });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/competitions');
+    }
+});
+
+adminRouter.post('/admin/competition/:id/modifier', authguard, async (req, res) => {
+    try {
+        await prisma.competition.update({
+            where: { id: parseInt(req.params.id) },
+            data: {
+                nom: req.body.nom,
+                jeuId: parseInt(req.body.jeuId),
+                dateDebut: new Date(req.body.dateDebut),
+                dateFin: new Date(req.body.dateFin)
+            }
+        });
+        res.redirect('/admin/competitions');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/competitions');
+    }
+});
+
+// Routes pour la modification des équipes
+adminRouter.get('/admin/equipe/:id/modifier', authguard, async (req, res) => {
+    try {
+        const equipe = await prisma.equipe.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
+        const jeux = await prisma.jeu.findMany();
+        
+        if (!equipe) {
+            return res.redirect('/admin/equipes');
+        }
+        res.render('pages/modifierEquipe.twig', { equipe, jeux });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/equipes');
+    }
+});
+
+adminRouter.post('/admin/equipe/:id/modifier', authguard, async (req, res) => {
+    try {
+        await prisma.equipe.update({
+            where: { id: parseInt(req.params.id) },
+            data: {
+                nom: req.body.nom,
+                jeuId: parseInt(req.body.jeuId)
+            }
+        });
+        res.redirect('/admin/equipes');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/equipes');
+    }
+});
 
 module.exports = adminRouter;

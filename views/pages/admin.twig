@@ -3,12 +3,9 @@
 {% block main %}
 <main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Colonne de gauche -->
         <div class="lg:col-span-1 space-y-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Gestion</h2>
-                
-                <!-- Section Créer -->
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Créer</h3>
                     <div class="space-y-3">
@@ -30,8 +27,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- Section Voir -->
                 <div>
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Voir</h3>
                     <div class="space-y-3">
@@ -51,10 +46,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Colonne de droite -->
         <div class="lg:col-span-2 space-y-8">
-            <!-- Gestion des utilisateurs -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des utilisateurs</h1>
                 
@@ -65,7 +57,7 @@
                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                         <button type="submit" 
                                 class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Rechercher
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </form>
@@ -101,8 +93,6 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <!-- Gestion des matchs non clôturés -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs non clôturés</h1>
                 
@@ -113,7 +103,7 @@
                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                         <button type="submit" 
                                 class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Rechercher
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </form>
@@ -151,8 +141,6 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <!-- Gestion des matchs clôturés -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Gestion des matchs clôturés</h1>
                 
@@ -163,7 +151,7 @@
                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                         <button type="submit" 
                                 class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                            Rechercher
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </form>
