@@ -211,6 +211,64 @@ adminRouter.post('/admin/jeu/creer', authguard, async (req, res) => {
     }
 });
 
+//////////////////////////////////////////////////////////////////////////// Route pour afficher le formulaire de modification de jeu ////////////////////////////////////////////////////////////////////////////
+adminRouter.get('/admin/jeu/:id/modifier', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            const jeu = await prisma.jeu.findUnique({
+                where: { id: parseInt(id) }
+            });
+
+            if (!jeu) {
+                return res.status(404).send("Jeu non trouvé");
+            }
+
+            return res.render("pages/modifierJeu.twig", { jeu });
+        }
+        res.redirect("/home");
+    } catch (error) {
+        console.error("Error fetching game for modification:", error);
+        res.redirect("/admin");
+    }
+});
+
+//////////////////////////////////////////////////////////////////////////// Route pour traiter la modification d'un jeu ////////////////////////////////////////////////////////////////////////////
+adminRouter.post('/admin/jeu/:id/modifier', authguard, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nom, description } = req.body;
+
+        // Validation du nom
+        if (!namePattern.test(nom)) {
+            const jeu = await prisma.jeu.findUnique({
+                where: { id: parseInt(id) }
+            });
+            return res.render("pages/modifierJeu.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres",
+                jeu
+            });
+        }
+
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.jeu.update({
+                where: { id: parseInt(id) },
+                data: {
+                    nom,
+                    description
+                }
+            });
+
+            res.redirect('/admin');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Error updating game:", error);
+        res.redirect("/admin");
+    }
+});
+
 //////////////////////////////////////////////////////////////////////////// Route suppression de jeu ////////////////////////////////////////////////////////////////////////////
 adminRouter.post('/admin/jeu/:id/supprimer', authguard, async (req, res) => {
     try {
@@ -376,22 +434,22 @@ adminRouter.get('/admin/equipe/creer', authguard, async (req, res) => {
             return res.redirect("/home");
         }
 
-                const jeux = await prisma.jeu.findMany();
+        const jeux = await prisma.jeu.findMany();
         const competitions = await prisma.competition.findMany({
             include: { jeu: true },
         });
 
-                const competitionsByJeu = competitions.reduce((acc, competition) => {
+        const competitionsByJeu = competitions.reduce((acc, competition) => {
             if (!acc[competition.jeuId]) {
                 acc[competition.jeuId] = [];
             }
-                    acc[competition.jeuId].push(competition);
-                    return acc;
-                }, {});
-                
-                return res.render("pages/creerEquipe.twig", {
-                    jeux,
-                    competitionsByJeu,
+            acc[competition.jeuId].push(competition);
+            return acc;
+        }, {});
+
+        return res.render("pages/creerEquipe.twig", {
+            jeux,
+            competitionsByJeu,
             utilisateur: req.session.utilisateur
         });
 
@@ -434,7 +492,7 @@ adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res)
         console.error("Erreur lors de la suppression de la compétition:", error);
         res.redirect("/admin");
     }
-                });
+});
 
 
 //////////////////////////////////////////////////////////////////////////// Traite la soumission du formulaire de création d'équipe ////////////////////////////////////////////////////////////////////////////
@@ -527,7 +585,7 @@ adminRouter.post('/admin/match/creer', authguard, async (req, res) => {
             const equipes = await prisma.equipe.findMany({
                 include: { jeu: true, competition: true }
             });
-            
+
             return res.render("pages/creerMatch.twig", {
                 error: "Le nom ne doit contenir que des lettres et des chiffres",
                 jeux,
@@ -622,7 +680,7 @@ adminRouter.get('/admin/match/:id/modifier', authguard, async (req, res) => {
                 where: { id: parseInt(id) },
                 include: {
                     jeu: true,
-                    competition: true,
+                    competition: true
                 }
             });
             const jeux = await prisma.jeu.findMany();
@@ -661,7 +719,7 @@ adminRouter.post('/admin/match/:id/modifier', authguard, async (req, res) => {
                 where: { id: parseInt(id) },
                 include: {
                     jeu: true,
-                    competition: true,
+                    competition: true
                 }
             });
             const jeux = await prisma.jeu.findMany();
@@ -810,6 +868,73 @@ adminRouter.post('/admin/match/:id/supprimer', authguard, async (req, res) => {
         }
     } catch (error) {
         console.error("Erreur lors de la suppression du match:", error);
+        res.redirect("/admin");
+    }
+});
+
+//////////////////////////////////////////////////////////////////////////// Route pour afficher le formulaire de modification d'équipe ////////////////////////////////////////////////////////////////////////////
+adminRouter.get('/admin/equipe/:id/modifier', authguard, async (req, res) => {
+    try {
+        if (!req.session.utilisateur || req.session.utilisateur.role !== 'ADMIN') {
+            return res.redirect("/home");
+        }
+
+        const equipe = await prisma.equipe.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
+
+        if (!equipe) {
+            return res.redirect('/admin/equipes');
+        }
+
+        return res.render("pages/modifierEquipe.twig", { equipe });
+    } catch (error) {
+        console.error("Error fetching team:", error);
+        res.redirect("/admin");
+    }
+});
+
+//////////////////////////////////////////////////////////////////////////// Route pour traiter la modification d'une équipe ////////////////////////////////////////////////////////////////////////////
+adminRouter.post('/admin/equipe/:id/modifier', authguard, async (req, res) => {
+    try {
+        const { nom, acronyme } = req.body;
+
+        // Validation du nom et de l'acronyme
+        if (!namePattern.test(nom)) {
+            const equipe = await prisma.equipe.findUnique({
+                where: { id: parseInt(req.params.id) }
+            });
+            return res.render("pages/modifierEquipe.twig", {
+                error: "Le nom ne doit contenir que des lettres et des chiffres",
+                equipe: { ...equipe, nom, acronyme }
+            });
+        }
+
+        if (!namePattern.test(acronyme)) {
+            const equipe = await prisma.equipe.findUnique({
+                where: { id: parseInt(req.params.id) }
+            });
+            return res.render("pages/modifierEquipe.twig", {
+                error: "L'acronyme ne doit contenir que des lettres et des chiffres",
+                equipe: { ...equipe, nom, acronyme }
+            });
+        }
+
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.equipe.update({
+                where: { id: parseInt(req.params.id) },
+                data: {
+                    nom,
+                    acronyme
+                }
+            });
+
+            res.redirect('/admin/equipes');
+        } else {
+            res.redirect("/home");
+        }
+    } catch (error) {
+        console.error("Error updating team:", error);
         res.redirect("/admin");
     }
 });
@@ -1088,36 +1213,45 @@ adminRouter.post('/admin/jeu/:id/modifier', authguard, async (req, res) => {
 // Routes pour la modification des compétitions
 adminRouter.get('/admin/competition/:id/modifier', authguard, async (req, res) => {
     try {
+        if (!req.session.utilisateur || req.session.utilisateur.role !== 'ADMIN') {
+            return res.redirect("/home");
+        }
+
         const competition = await prisma.competition.findUnique({
             where: { id: parseInt(req.params.id) }
         });
-        const jeux = await prisma.jeu.findMany();
-        
+
         if (!competition) {
             return res.redirect('/admin/competitions');
         }
-        res.render('pages/modifierCompetition.twig', { competition, jeux });
+
+        return res.render("pages/modifierCompetition.twig", { competition });
     } catch (error) {
-        console.error(error);
-        res.redirect('/admin/competitions');
+        console.error("Error fetching competition:", error);
+        res.redirect("/admin");
     }
 });
 
 adminRouter.post('/admin/competition/:id/modifier', authguard, async (req, res) => {
     try {
-        await prisma.competition.update({
-            where: { id: parseInt(req.params.id) },
-            data: {
-                nom: req.body.nom,
-                jeuId: parseInt(req.body.jeuId),
-                dateDebut: new Date(req.body.dateDebut),
-                dateFin: new Date(req.body.dateFin)
-            }
-        });
-        res.redirect('/admin/competitions');
+        const { nom, description } = req.body;
+        
+        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            await prisma.competition.update({
+                where: { id: parseInt(req.params.id) },
+                data: {
+                    nom,
+                    description
+                }
+            });
+
+            res.redirect('/admin/competitions');
+        } else {
+            res.redirect("/home");
+        }
     } catch (error) {
-        console.error(error);
-        res.redirect('/admin/competitions');
+        console.error("Error updating competition:", error);
+        res.redirect("/admin");
     }
 });
 
@@ -1128,7 +1262,7 @@ adminRouter.get('/admin/equipe/:id/modifier', authguard, async (req, res) => {
             where: { id: parseInt(req.params.id) }
         });
         const jeux = await prisma.jeu.findMany();
-        
+
         if (!equipe) {
             return res.redirect('/admin/equipes');
         }
