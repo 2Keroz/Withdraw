@@ -350,3 +350,27 @@ document.querySelector('form[action="/admin/equipe/creer"]')?.addEventListener('
         event.preventDefault();
     }
 });
+
+// Fonctions pour la modale de suppression d'utilisateur
+function openDeleteModal(userId) {
+    const modal = document.getElementById('deleteModal');
+    const form = document.getElementById('deleteUserForm');
+    
+    // Définir l'action du formulaire
+    form.action = `/admin/utilisateur/${userId}/supprimer`;
+    
+    // Afficher la modale
+    modal.classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+}
+
+// Fermer la modale si on clique en dehors
+document.getElementById('deleteModal')?.addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDeleteModal();
+            }
+        });
