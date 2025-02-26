@@ -101,7 +101,7 @@ function loadCompetitions(jeuId) {
             competitionList.style.display = 'block';
             competitions.forEach(competition => {
                 const li = document.createElement('li');
-                li.innerHTML = `<a href="#" onclick="loadMatchs(${competition.id})" class="text-blue-600 hover:underline">${competition.nom}</a>`;
+                li.innerHTML = `<a href="#" onclick="loadMatchs(${competition.id})" class="text-gray-700 hover:text-red-600 transition duration-200">• ${competition.nom}</a>`;
                 competitionList.appendChild(li);
             });
         }).catch(error => console.error("Erreur lors du chargement des compétitions:", error));

@@ -58,6 +58,7 @@ userRouter.get('/modifierProfil', authguard, async (req, res) => {
 
 // Route modification de profil
 
+
 userRouter.post('/profil/modifier', authguard, async (req, res) => {
     try {
         const { nom, prenom, email, date_naissance, current_password, new_password, confirm_password } = req.body;

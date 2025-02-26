@@ -5,53 +5,50 @@ const hashPasswordExtension = require("../../services/extension/hashPasswordExte
 
 const prisma = new PrismaClient().$extends(hashPasswordExtension);
 
-// Regex patterns
+
 const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+const namePattern = /^[a-zA-Z]+$/;
 
-registerRouter.get('/register', (req, res) => {
-    res.render('pages/register.twig');
-});
+//////////////////////////// ROUTE D'INSCRIPTION /////////////////////
+registerRouter.get("/register", async (req,res) => {
+    res.render('pages/register.twig')
+})
 
 //////////////////////////// ROUTE D'INSCRIPTION /////////////////////
 registerRouter.post("/register", async (req, res) => {
     try {
         const { nom, prenom, date, mail, password, confirm_password } = req.body;
+        let errors = {}; 
 
-        // Validation du nom et prénom
-        if (!nom || nom.trim() === '') {
-            return res.render("pages/register.twig", {
-                errors: { nom: "Le nom est obligatoire" }
-            });
+        if (!namePattern.test(nom)) {
+            errors.nom = "Le nom ne doit comporter que des lettres";
         }
 
-        if (!prenom || prenom.trim() === '') {
-            return res.render("pages/register.twig", {
-                errors: { prenom: "Le prénom est obligatoire" }
-            });
+        if (!namePattern.test(prenom)) {
+            errors.prenom = "Le prénom ne doit comporter que des lettres";
         }
 
-        // Validation de l'email
         if (!emailPattern.test(mail)) {
-            return res.render("pages/register.twig", {
-                errors: { mail: "L'email n'est pas valide. Il doit contenir uniquement des lettres, chiffres, et les caractères - _ ." }
-            });
+            errors.mail = "L'email n'est pas valide. Il doit contenir uniquement des lettres, chiffres, et les caractères - _ .";
         }
 
-        // Validation du mot de passe
         if (!passwordPattern.test(password)) {
-            return res.render("pages/register.twig", {
-                errors: { password: "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial" }
-            });
+            errors.password = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial";
         }
 
         if (password !== confirm_password) {
-            return res.render("pages/register.twig", {
-                errors: { password: "Les mots de passe ne correspondent pas. Veuillez réessayer." }
-            });
+            errors.password = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
         }
-        
+
+        if (Object.keys(errors).length > 0) {
+            return res.render("pages/register.twig", { errors });
+        }
+
+        // Formatage de la date
         const formattedDate = new Date(date).toISOString();
+
+        // Création de l'utilisateur
         const utilisateur = await prisma.utilisateur.create({
             data: {
                 nom,
@@ -71,7 +68,9 @@ registerRouter.post("/register", async (req, res) => {
             prenom: utilisateur.prenom,
             date_naissance: utilisateur.date_naissance,
         };
+
         res.redirect("/home");
+
     } catch (error) {
         console.error("Erreur lors de l'inscription :", error);
         res.render("pages/register.twig", {
