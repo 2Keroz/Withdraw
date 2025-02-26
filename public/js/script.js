@@ -368,9 +368,32 @@ function closeDeleteModal() {
     modal.classList.add('hidden');
 }
 
-// Fermer la modale si on clique en dehors
+// Fonctions pour la modale de suppression de match
+function openDeleteMatchModal(matchId) {
+    const modal = document.getElementById('deleteMatchModal');
+    const form = document.getElementById('deleteMatchForm');
+    
+    // Définir l'action du formulaire
+    form.action = `/admin/match/${matchId}/supprimer`;
+    
+    // Afficher la modale
+    modal.classList.remove('hidden');
+}
+
+function closeDeleteMatchModal() {
+    const modal = document.getElementById('deleteMatchModal');
+    modal.classList.add('hidden');
+}
+
+// Fermer les modales si on clique en dehors
 document.getElementById('deleteModal')?.addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeDeleteModal();
-            }
-        });
+    if (event.target === this) {
+        closeDeleteModal();
+    }
+});
+
+document.getElementById('deleteMatchModal')?.addEventListener('click', function(event) {
+    if (event.target === this) {
+        closeDeleteMatchModal();
+    }
+});
