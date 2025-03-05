@@ -201,7 +201,7 @@ userRouter.post('/parier', authguard, async (req, res) => {
         res.redirect('/home');
     } catch (error) {
         console.error("Erreur lors de la création du pari :", error);
-        res.redirect('/home?error=parisErreur');
+        res.redirect('/home');
     }
 });
 
