@@ -31,15 +31,15 @@
                         <select name="jeuId" 
                                 id="jeuId" 
                                 required 
-                                onchange="filtrerCompetitions()"
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
-                            <option value="">-- Sélectionnez un jeu --</option>
+                                disabled
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 bg-gray-50 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md cursor-not-allowed">
                             {% for jeu in jeux %}
                                 <option value="{{ jeu.id }}" {% if jeu.id == match.jeuId %}selected{% endif %}>
                                     {{ jeu.nom }}
                                 </option>
                             {% endfor %}
                         </select>
+                        <input type="hidden" name="jeuId" value="{{ match.jeuId }}">
                     </div>
                 </div>
                 <div>
@@ -50,19 +50,19 @@
                         <select name="competitionId" 
                                 id="competitionId" 
                                 required 
-                                onchange="filtrerEquipes()"
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md">
-                            <option value="">-- Sélectionnez une compétition --</option>
+                                disabled
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 bg-gray-50 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md cursor-not-allowed">
                             {% for jeuId, competitions in competitionsByJeu %}
-                                <optgroup label="Jeu ID: {{ jeuId }}">
+                                {% if jeuId == match.jeuId %}
                                     {% for competition in competitions %}
                                         <option value="{{ competition.id }}" {% if competition.id == match.competitionId %}selected{% endif %}>
                                             {{ competition.nom }}
                                         </option>
                                     {% endfor %}
-                                </optgroup>
+                                {% endif %}
                             {% endfor %}
                         </select>
+                        <input type="hidden" name="competitionId" value="{{ match.competitionId }}">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">

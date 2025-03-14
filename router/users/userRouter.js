@@ -208,24 +208,69 @@ userRouter.post('/parier', authguard, async (req, res) => {
 userRouter.get('/mes-paris', authguard, async (req, res) => {
     try {
         const utilisateurId = req.session.utilisateur.id;
+        const tri = req.query.tri || 'date';
 
-        const paris = await prisma.paris.findMany({
-            where: { utilisateur_id: utilisateurId },
+        let orderBy = { date_pari: 'desc' };
+        let whereTermines = { 
+            utilisateur_id: utilisateurId,
+            NOT: { status: 'EN_COURS' }
+        };
+        let whereEnCours = { 
+            utilisateur_id: utilisateurId,
+            status: 'EN_COURS'
+        };
+
+        switch(tri) {
+            case 'date-asc':
+                orderBy = { date_pari: 'asc' };
+                break;
+            case 'victoires':
+                whereTermines = {
+                    ...whereTermines,
+                    status: 'GAGNE'
+                };
+                break;
+            case 'defaites':
+                whereTermines = {
+                    ...whereTermines,
+                    status: 'PERDU'
+                };
+                break;
+        }
+
+        const parisEnCours = await prisma.paris.findMany({
+            where: whereEnCours,
             include: {
                 utilisateur: true,
+                match: {
+                    include: {
+                        equipe1: true,
+                        equipe2: true
+                    }
+                }
             },
-            orderBy: {
-                date_pari: 'desc',
-            },
+            orderBy
         });
 
-        const parisEnCours = paris.filter(pari => pari.status === 'EN_COURS');
-        const parisTermines = paris.filter(pari => pari.status !== 'EN_COURS');
+        const parisTermines = await prisma.paris.findMany({
+            where: whereTermines,
+            include: {
+                utilisateur: true,
+                match: {
+                    include: {
+                        equipe1: true,
+                        equipe2: true
+                    }
+                }
+            },
+            orderBy
+        });
 
         res.render('pages/mesParis.twig', {
             parisEnCours,
             parisTermines,
             utilisateur: req.session.utilisateur,
+            tri
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des paris :", error);

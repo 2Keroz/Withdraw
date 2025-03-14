@@ -5,7 +5,15 @@
 <main class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris en cours</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Paris en cours</h2>
+                <div class="flex gap-4">
+                    <select onchange="window.location.href=this.value" class="bg-white border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <option value="/mes-paris?tri=date" {% if tri == 'date' %}selected{% endif %}>Date ↓</option>
+                        <option value="/mes-paris?tri=date-asc" {% if tri == 'date-asc' %}selected{% endif %}>Date ↑</option>
+                    </select>
+                </div>
+            </div>
             {% if parisEnCours is not empty %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for pari in parisEnCours %}
@@ -41,7 +49,17 @@
             {% endif %}
         </div>
         <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Paris terminés</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Paris terminés</h2>
+                <div class="flex gap-4">
+                    <select onchange="window.location.href=this.value" class="bg-white border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <option value="/mes-paris?tri=date" {% if tri == 'date' %}selected{% endif %}>Date ↓</option>
+                        <option value="/mes-paris?tri=date-asc" {% if tri == 'date-asc' %}selected{% endif %}>Date ↑</option>
+                        <option value="/mes-paris?tri=victoires" {% if tri == 'victoires' %}selected{% endif %}>Victoires</option>
+                        <option value="/mes-paris?tri=defaites" {% if tri == 'defaites' %}selected{% endif %}>Défaites</option>
+                    </select>
+                </div>
+            </div>
             {% if parisTermines is not empty %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for pari in parisTermines %}
