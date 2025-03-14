@@ -60,14 +60,12 @@
 											</svg>
 											Modifier
 										</a>
-										<form action="/admin/equipe/{{ equipe.id }}/supprimer" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?');">
-											<button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
-												<svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-												</svg>
-												Supprimer
-											</button>
-										</form>
+										<button type="button" onclick="openDeleteEquipeModal('{{ equipe.id }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+											<svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+											</svg>
+											Supprimer
+										</button>
 									</div>
 								</div>
 							</div>
@@ -94,5 +92,35 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="deleteEquipeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+			<div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+				<h3 class="text-xl font-bold text-gray-900 mb-4">Confirmation de suppression</h3>
+				<p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir supprimer cette équipe ? Cette action est irréversible.</p>
+				<div class="flex gap-4">
+					<button type="button" class="flex-1 py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200" onclick="closeDeleteEquipeModal()">
+						Annuler
+					</button>
+					<form id="deleteEquipeForm" method="POST" class="flex-1">
+						<button type="submit" class="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200">
+							Confirmer
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	</main>
+{% endblock %}
+
+{% block script %}
+<script>
+    function openDeleteEquipeModal(id) {
+        document.getElementById('deleteEquipeModal').classList.remove('hidden');
+        document.getElementById('deleteEquipeForm').action = '/admin/equipe/' + id + '/supprimer';
+    }
+
+    function closeDeleteEquipeModal() {
+        document.getElementById('deleteEquipeModal').classList.add('hidden');
+    }
+</script>
 {% endblock %}

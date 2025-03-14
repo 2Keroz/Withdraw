@@ -477,22 +477,22 @@ adminRouter.get('/admin/equipes/:competitionId', authguard, async (req, res) => 
 
 //////////////////////////////////////////////////////////////////////////// Route supp compet ////////////////////////////////////////////////////////////////////////////
 
-adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res) => {
-    try {
-        const { id } = req.params;
-        if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
-            await prisma.competition.delete({
-                where: { id: parseInt(id) }
-            });
-            res.redirect('/admin');
-        } else {
-            res.redirect("/home");
-        }
-    } catch (error) {
-        console.error("Erreur lors de la suppression de la compétition:", error);
-        res.redirect("/admin");
-    }
-});
+// adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+//             await prisma.competition.delete({
+//                 where: { id: parseInt(id) }
+//             });
+//             res.redirect('/admin');
+//         } else {
+//             res.redirect("/home");
+//         }
+//     } catch (error) {
+//         console.error("Erreur lors de la suppression de la compétition:", error);
+//         res.redirect("/admin");
+//     }
+// });
 
 
 //////////////////////////////////////////////////////////////////////////// Traite la soumission du formulaire de création d'équipe ////////////////////////////////////////////////////////////////////////////
@@ -1126,9 +1126,32 @@ adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res)
     try {
         const { id } = req.params;
         if (req.session.utilisateur && req.session.utilisateur.role === 'ADMIN') {
+            // D'abord supprimer les paris associés aux matchs de cette compétition
+            const matchs = await prisma.match.findMany({
+                where: { competitionId: parseInt(id) }
+            });
+            
+            for (const match of matchs) {
+                await prisma.paris.deleteMany({
+                    where: { matchId: match.id }
+                });
+            }
+
+            // Ensuite supprimer les matchs
+            await prisma.match.deleteMany({
+                where: { competitionId: parseInt(id) }
+            });
+
+            // Supprimer les équipes
+            await prisma.equipe.deleteMany({
+                where: { competitionId: parseInt(id) }
+            });
+
+            // Enfin, supprimer la compétition
             await prisma.competition.delete({
                 where: { id: parseInt(id) }
             });
+            
             res.redirect('/admin/competitions');
         } else {
             res.redirect("/home");
@@ -1138,7 +1161,6 @@ adminRouter.post('/admin/competition/:id/supprimer', authguard, async (req, res)
         res.redirect("/admin");
     }
 });
-
 
 /////////////// EQUIPES //////////////////
 
