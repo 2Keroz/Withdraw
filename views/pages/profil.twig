@@ -37,7 +37,7 @@
                    class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition duration-200">
                     Modifier profil
                 </a>
-                <form action="/profil/supprimer" method="POST" class="inline-block">
+                <form action="/profil/supprimer" method="POST" class="inline-block" onsubmit="return openDeleteProfileModal(event)">
                     <button type="submit" 
                             class="w-full px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
                         Supprimer mon compte
@@ -46,5 +46,39 @@
             </div>
         </div>
     </div>
+
+    {# Modale de confirmation avec le style corrigé #}
+    <div id="deleteProfileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Confirmation de suppression</h3>
+            <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et vous perdrez toutes vos données.</p>
+            <div class="flex gap-4">
+                <button type="button" 
+                        class="flex-1 py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200" 
+                        onclick="closeDeleteProfileModal()">
+                    Annuler
+                </button>
+                <form id="deleteProfileForm" method="POST" action="/profil/supprimer" class="flex-1">
+                    <button type="submit" 
+                            class="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200">
+                        Confirmer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
+{% endblock %}
+
+{% block script %}
+<script>
+    function openDeleteProfileModal(event) {
+        event.preventDefault();
+        document.getElementById('deleteProfileModal').classList.remove('hidden');
+    }
+
+    function closeDeleteProfileModal() {
+        document.getElementById('deleteProfileModal').classList.add('hidden');
+    }
+</script>
 {% endblock %}
